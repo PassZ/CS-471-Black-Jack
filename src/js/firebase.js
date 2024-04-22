@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-analytics.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -45,9 +45,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
   signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
           // Signed in 
-          const user = userCredential.user;
-          console.log('Logged in:', user);
-          // Redirect to another page or update the UI
+          console.log('Logged in:', userCredential.user);
       })
       .catch((error) => {
           console.error('Login failed:', error);
@@ -61,14 +59,10 @@ document.getElementById('register-form').addEventListener('submit', function(eve
   const password = document.getElementById('register-password').value;
   createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-          // Registered
-          const user = userCredential.user;
-          console.log('Registered:', user);
-          // Redirect or update UI
+          // Registered but not logged in
+          console.log('Registered:', userCredential.user);
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error('Registration failed:', errorCode, errorMessage);
-    });    
+          console.error('Registration failed:', error);
+      });
 });
