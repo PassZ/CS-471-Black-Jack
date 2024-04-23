@@ -1,28 +1,69 @@
 html, body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    background: #081b29;
+}
+
+.auth-container {
+    position: relative;
+    width: 750px;
+    height: 450px;
+    background: transparent;
 }
 
 h1 {
-    color: #333;
+    font-family: 'Apple Chancery', sans-serif;
+    font-size: 50px;
+    color: #0ef;
     text-align: center;
 }
 
+h2 {
+    font-family: 'Apple Chancery', sans-serif;
+    font-size: 25px;
+    color: #0ef;
+    text-align: center;
+}
+
+p {
+    font-family: 'Apple Chancery', sans-serif;
+    font-size: 15px;
+    color: #0ef;
+    text-align: left;
+}
+
+a {
+    font-family: 'Apple Chancery', sans-serif;
+    font-size: 15px;
+    color: #fff;
+    text-align: left;
+    text-decoration: none;
+}
+
+p1 {
+    text-align: center;
+    font-family: 'Apple Chancery', sans-serif;
+    color: #0ef;
+    font-size: 50px;
+}
+
 input[type="email"], input[type="password"] {
+    font-family:'Garamond';
     width: calc(100% - 22px);
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    background: #0ef;
 }
 
 button {
+    font-size: 20px;
+    font-family:'Garamond';
     background-color: #0056b3;
     color: white;
     border: none;
@@ -63,7 +104,10 @@ button:hover {
 }
 
 .form-container {
-    border: 1px solid #ccc;
+    height: 250px;
+    width: 400px;
+    border: 2px solid #0ef;
+    border-radius: 40px;
     padding: 20px;
 }
 
