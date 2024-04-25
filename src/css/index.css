@@ -186,3 +186,70 @@ button:hover {
 .user-options.show {
     display: block;
 }
+
+#blackjack-table {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.hand img {
+    margin: 5px;
+    width: 100px;
+    height: 150px;
+}
+
+#game-controls button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.total-display {
+    font-size: 18px;
+    font-family: 'I Insane Rush', Arial, sans-serif;
+    color: #ffffff;
+    background-color: #333333;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    text-align: center;
+    width: 100%;
+}
+
+.hand {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    vertical-align: middle;
+}
+
+#game-controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 5px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+#game-controls button:hover {
+    background-color: #45a049;
+}
+
+#status {
+    font-size: 20px;
+    color: #dc3545;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.hand .card-back {
+    width: 175px;
+    height: 175px;
+    display: block;
+    margin: auto;
+}
