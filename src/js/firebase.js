@@ -26,15 +26,23 @@ const auth = getAuth(app);
 onAuthStateChanged(auth, (user) => {
   const authContainer = document.getElementById('auth-container');
   const userContent = document.getElementById('user-content');
-  if (user) {
-      authContainer.style.display = 'none';
-      userContent.style.display = 'block';
-      console.log('User is signed in', user);
-  } else {
-      authContainer.style.display = 'block';
-      userContent.style.display = 'none';
-      console.log('No user is signed in');
+  if( authContainer && userContent ){
+    if (user) {
+        authContainer.style.display = 'none';
+        userContent.style.display = 'block';
+        console.log('User is signed in', user);
+    } else {
+        authContainer.style.display = 'block';
+        userContent.style.display = 'none';
+        console.log('No user is signed in');
+    }
   }
+
+    if (user && window.location.pathname === '/src/accountInformation.html') {
+        document.getElementById('username').textContent = user.displayName || user.email.substring(0, user.email.indexOf('@'));
+        document.getElementById('email').textContent = user.email;
+
+    }
 });
 
 // Login event listener

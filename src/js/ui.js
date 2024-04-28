@@ -1,5 +1,5 @@
 // Import necessary Firebase functions
-import { getAuth, sendPasswordResetEmail, signOut } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+import { getAuth, sendPasswordResetEmail, signOut , onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
 // Show login form and hide register form
 function showLoginForm() {
