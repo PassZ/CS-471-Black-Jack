@@ -18,7 +18,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
@@ -26,17 +26,17 @@ const auth = getAuth(app);
 onAuthStateChanged(auth, (user) => {
   const authContainer = document.getElementById('auth-container');
   const userContent = document.getElementById('user-content');
-  if( authContainer && userContent ){
-    if (user) {
-        authContainer.style.display = 'none';
-        userContent.style.display = 'block';
-        console.log('User is signed in', user);
-    } else {
-        authContainer.style.display = 'block';
-        userContent.style.display = 'none';
-        console.log('No user is signed in');
+    if( authContainer && userContent ){
+        if (user) {
+            authContainer.style.display = 'none';
+            userContent.style.display = 'block';
+            console.log('User is signed in', user);
+        } else {
+            authContainer.style.display = 'block';
+            userContent.style.display = 'none';
+            console.log('No user is signed in');
+        }
     }
-  }
 
     if (user && window.location.pathname === '/src/accountInformation.html') {
         document.getElementById('username').textContent = user.displayName || user.email.substring(0, user.email.indexOf('@'));
@@ -45,32 +45,34 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Login event listener
-document.getElementById('login-form').addEventListener('submit', function(event) {
-  event.preventDefault();
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
-  signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-          // Signed in 
-          console.log('Logged in:', userCredential.user);
-      })
-      .catch((error) => {
-          console.error('Login failed:', error);
-      });
-});
+if( window.location.pathname === '/src/login.html'){
+    // Login event listener
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                console.log('Logged in:', userCredential.user);
+            })
+            .catch((error) => {
+                console.error('Login failed:', error);
+            });
+    });
 
-// Register event listener
-document.getElementById('register-form').addEventListener('submit', function(event) {
-  event.preventDefault();
-  const email = document.getElementById('register-email').value;
-  const password = document.getElementById('register-password').value;
-  createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-          // Registered but not logged in
-          console.log('Registered:', userCredential.user);
-      })
-      .catch((error) => {
-          console.error('Registration failed:', error);
-      });
-});
+    // Register event listener
+    document.getElementById('register-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Registered but not logged in
+                console.log('Registered:', userCredential.user);
+            })
+            .catch((error) => {
+                console.error('Registration failed:', error);
+            });
+    });
+}
