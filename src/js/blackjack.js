@@ -55,6 +55,7 @@ function startGame() {
     dealCards(playerCount);
     displayHands();
     checkInitialBlackjack();
+    checkInitialSplit();
     updateStatus();
     document.getElementById('play-again-btn').style.display = 'none';
     document.getElementById('game-controls').querySelectorAll('button:not(#play-again-btn)').forEach(button => button.style.display = '');
@@ -69,10 +70,18 @@ function checkInitialBlackjack() {
     }
 }
 
+function checkInitialSplit(){
+    const playerValue = getHandValue(playerHand);
+    if(playerHand[0] === playerHand[1]) { // Add another check here to see if they have enough money to split
+        // Display the split button
+        document.getElementById('game-controls').querySelectorAll('button:not(#split)').forEach(button => button.style.display = 'none');
+    }
+}
+
 function displayHands() {
     displayHand('dealer-hand', dealerHand, false);
     displayHand('player-hand', playerHand, true);
-    autoStandCheck();
+    // autoStandCheck();
 }
 
 function displayHand(elementId, hand, isPlayer) {
@@ -108,6 +117,20 @@ function playerHits() {
     if (getHandValue(playerHand).value > 21) {
         document.getElementById('status').textContent = "Player busts!";
         gameActive = false;
+    }
+}
+
+// This assumes that the player has enough money to double down
+function playerDoubles(){
+    if (!gameActive) return;
+    // Player doubles their bet
+    playerHand.push(deck.pop());
+    displayHands();
+    if(getHandValue(playerHand).value > 21) {
+        document.getElementById('status').textContent = "Player busts!";
+        gameActive = false;
+    }else {
+        playerStands();
     }
 }
 
