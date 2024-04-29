@@ -31,6 +31,17 @@ onAuthStateChanged(auth, async (user) => {
         else{
             docSnap = docSnap.docs[0];
         }
+
+        if( window.location.pathname === '/src/accountInformation.html'){
+            const doc = docSnap.data();
+            document.getElementById( "gamesPlayed" ).textContent = doc.gamesPlayed;
+            document.getElementById( "gamesWon" ).textContent = doc.gamesWon;
+            document.getElementById( "winRate" ).textContent =  (Math.trunc( 10000 * (doc.gamesWon / ( doc.gamesPlayed === 0 ? 1 : doc.gamesPlayed))) / 100).toString() + "%" ;
+            document.getElementById( "moneyWon" ).textContent = 0;
+            document.getElementById( "moneyDeposited" ).textContent = 0;
+            document.getElementById( "accountBalance" ).textContent = 0;
+            document.getElementById( "gainLossPercent" ).textContent = 0;
+        }
     }
 });
 
@@ -70,13 +81,14 @@ async function logGameResults() {
             gamesPlayed: increment(1)
         });
     }
-    else{
+    else {
         await updateDoc( docSnap.ref , {
             gamesWon: increment(1),
             gamesPlayed: increment(1)
         })
     }
 
-    const t = await getDocs( query( stats, where( "userID" , "==" , auth.currentUser.uid )));
-    console.log( t.docs[0].data());
+
+    console.log( docSnap );
+
 }

@@ -25,6 +25,12 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        p {
+            font-family: "Times New Roman";
+            font-size: 16px;
+            color:blueviolet;
+
+        }
     </style>
 </head>
 <body>
@@ -42,7 +48,6 @@
                     <li><a href="accountInformation.html">Account Information</a></li>
                     <li><a href = "login.html">Blackjack</a></li>
                     <li><a href="#" onclick="logout()">Log Out</a></li>
-                    <li><a href="#" onclick="test()">Log Out</a></li>
                 </ul>
             </div>
         <div class="row">
@@ -60,13 +65,13 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Game Statistics</h5>
-                        <p><strong>Games Played:</strong> 150</p>
-                        <p><strong>Games Won:</strong> 90</p>
-                        <p><strong>Win Percentage:</strong> 60%</p>
-                        <p><strong>Total Winnings:</strong> $5,000</p>
-                        <p><strong>Total Deposited:</strong> $3,000</p>
-                        <p><strong>Account Balance:</strong> $2,000</p>
-                        <p><strong>Profit/Loss Percentage:</strong> 66.67%</p>
+                        <p><strong>Games Played:</strong> <span id="gamesPlayed"></span></p>
+                        <p><strong>Games Won:</strong> <span id="gamesWon"></span></p>
+                        <p><strong>Win Percentage:</strong> <span id="winRate"></span></p>
+                        <p><strong>Total Winnings:</strong> <span id="moneyWon"></span></p>
+                        <p><strong>Total Deposited:</strong> <span id="moneyDeposited"></span></p>
+                        <p><strong>Account Balance:</strong> <span id="accountBalance"></span></p>
+                        <p><strong>Profit/Loss Percentage:</strong> <span id="gainLossPercent"></span></p>
                     </div>
                 </div>
             </div>
