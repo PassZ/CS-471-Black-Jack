@@ -5,14 +5,14 @@ import { app , auth} from './firebase.js'
 let db = getFirestore(app);
 const stats = collection(db, "UserStats");
 let docSnap = null;
+
+
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         const q = query(stats, where( "userID" , "==", auth.currentUser.uid));
         docSnap = await getDocs( q );
         const c = docSnap.size;
-        console.log( c );
-        if( c === 0 ){
-        
+        if( c === 0 ){        
             try {
                 docSnap = await addDoc(collection(db , "UserStats"), {
                     gamesLost: 0,
@@ -39,8 +39,7 @@ if (statusDiv){
     const observer = new MutationObserver((mutations) => {
         for (let mutation of mutations) {
             if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                if(statusDiv.textContent !== 'Choose your action!'){
-                    console.log( statusDiv );
+                if(statusDiv.textContent !== 'Choose your action!' && statusDiv.textContent !== 'Auto-stand on hard 17 or higher'){
                     logGameResults();
                 }
             }
@@ -58,30 +57,26 @@ if (statusDiv){
 
 async function logGameResults() {
     const result = document.getElementById('status').textContent;
-    if( result === 'Player Busts!' || result === 'Dealer wins, player busts!' || 'Dealer wins!'){
-        // console.log( docSnap.data() );
-        db.collection( "UserStats" ).where( "userID" , "==" , auth.currentUser.uid ).limit(1).get().then( query => {
-            console.log( query );
-            const data = query.docs[0];
-            console.log( data.data() );
-            const tmp = data.data();
-            tmp.gamesLost = tmp.gamesLost + 1;
-            tmp.gamesPlayed = tmp.gamesPlayed + 1;
-            console.log( tmp );
-            data.ref.update( tmp );
-        })
-        // console.log( doc(db , "UserStats" , auth.currentUser.uid));
-        // console.log( docSnap.data() );
-        // const data = docSnap.data();
-        // data.gamesPlayed = data.gamesPlayed + 1;
-        // data.gamesLost = data.gamesLost + 1;
-        // docSnap.ref.update( data );
-        
+    console.log( result );
+    if( result === "Player Busts!" || result === "Dealer wins, player busts!" || result === "Dealer wins!"){
+        await updateDoc( docSnap.ref , {
+            gamesPlayed: increment(1),
+            gamesLost: increment(1)
+        });       
     }
-    else {
-        dosSnap.update({
-            gamesWon: docSnap.gamesWon + 1,
-            gamesPlayed: docSnap.gamesPlayed +1
+    else if( result === 'Draw!'){
+        await updateDoc(docSnap.ref , {
+            gamesTied: increment(1),
+            gamesPlayed: increment(1)
         });
     }
+    else{
+        await updateDoc( docSnap.ref , {
+            gamesWon: increment(1),
+            gamesPlayed: increment(1)
+        })
+    }
+
+    const t = await getDocs( query( stats, where( "userID" , "==" , auth.currentUser.uid )));
+    console.log( t.docs[0].data());
 }
