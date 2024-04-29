@@ -5,6 +5,7 @@ let deck = [];
 let dealerHand = [];
 let playerHand = [];
 let gameActive = true;
+let playerCount = 1;
 
 function createDeck() {
     deck = [];
@@ -23,11 +24,35 @@ function shuffleDeck() {
     }
 }
 
+function dealCards(numPlayers) {
+    playerHand = [];
+    dealerHand = [];
+
+    // Burn the first card
+    deck.pop();
+    // Deal first card to players
+    for (let j = 0; j < numPlayers; j++) {
+        playerHand.push(deck.pop());
+    }
+    // Deal first card to dealer
+    dealerHand.push(deck.pop());
+
+    // Deal second card to players
+    for(let i = 0; i < numPlayers; i++) {
+        playerHand.push(deck.pop());
+    }
+
+    // Deal second card to the dealer
+    dealerHand.push(deck.pop());
+
+    return {players: playerHand, dealer: dealerHand};
+
+}
+
 function startGame() {
     gameActive = true;
     createDeck();
-    dealerHand = [deck.pop(), deck.pop()];
-    playerHand = [deck.pop(), deck.pop()];
+    dealCards(playerCount);
     displayHands();
     checkInitialBlackjack();
     updateStatus();
@@ -86,6 +111,12 @@ function playerHits() {
     }
 }
 
+function playerSplit()  {
+    if(!gameActive) return;
+    playerHand.push(deck.pop());
+    displayHands();
+}
+
 function playerStands() {
     if (!gameActive) return;
     gameActive = false;
@@ -102,16 +133,18 @@ function updatePlayerTotalOnStand() {
         document.getElementById('player-total').textContent = `Player Total: ${Math.max(...playerValue.text.split('/'))}`;
     }
 }
-
+ // It is my belief that this should not be implemented for the player but only for the dealer.
+ // I have been unable to find any information showing that this is how blackjack is played
 function autoStandCheck() {
     const playerValue = getHandValue(playerHand);
-    // Auto stand if the total is 17 or more and it's not a soft total
+    // Auto stand if the total is 17 or more, and it's not a soft total
     if (playerValue.value >= 17 && playerValue.text.indexOf('/') === -1) {
         document.getElementById('status').textContent = "Auto-stand on hard 17 or higher";
         playerStands();
     }
 }
-
+ // Make sure that the dealer still hits even if they have a soft 17
+ // A nice feature to add would be to have a toggle switch for the user to decide if they want the dealer to hit a soft 17 or not
 async function dealerPlays() {
     displayHand('dealer-hand', dealerHand, false);
     let dealerValue = getHandValue(dealerHand);
