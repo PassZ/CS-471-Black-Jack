@@ -69,7 +69,7 @@ if (statusDiv){
 async function logGameResults() {
     const result = document.getElementById('status').textContent;
     console.log( result );
-    if( result === "Player Busts!" || result === "Dealer wins, player busts!" || result === "Dealer wins!"){
+    if(  result === "Dealer wins, player busts!" || result === "Dealer wins!"){
         await updateDoc( docSnap.ref , {
             gamesPlayed: increment(1),
             gamesLost: increment(1)
@@ -81,14 +81,10 @@ async function logGameResults() {
             gamesPlayed: increment(1)
         });
     }
-    else {
+    else if (result === "Player wins!" || result === "Player wins, dealer busts!" ){
         await updateDoc( docSnap.ref , {
             gamesWon: increment(1),
             gamesPlayed: increment(1)
         })
     }
-
-
-    console.log( docSnap );
-
 }
