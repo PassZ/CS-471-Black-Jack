@@ -1,5 +1,5 @@
 // Import necessary Firebase functions
-import { getAuth, sendPasswordResetEmail, signOut , onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+import { getAuth, sendPasswordResetEmail, signOut } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
 // Show login form and hide register form
 function showLoginForm() {
@@ -8,11 +8,11 @@ function showLoginForm() {
     document.getElementById('register-form-container').style.display = 'none';
     
     // Set the forgot password link to display for the login form
-    // document.getElementById('forgot-password-link').style.display = 'block';
+    document.getElementById('forgot-password-link').style.display = 'block';
     
     // Update the active tab styling
-    // document.querySelector('.tab.active').classList.remove('active');
-    // document.querySelector('li[onclick="showLoginForm()"]').classList.add('active');
+    document.querySelector('.tab.active').classList.remove('active');
+    document.querySelector('li[onclick="showLoginForm()"]').classList.add('active');
 }
 
 // Show register form and hide login form
@@ -22,11 +22,11 @@ function showRegisterForm() {
     document.getElementById('register-form-container').style.display = 'block';
     
     // Hide the forgot password link since it's not needed for the register form
-    // document.getElementById('forgot-password-link').style.display = 'none';
+    document.getElementById('forgot-password-link').style.display = 'none';
     
     // Update the active tab styling
-    // document.querySelector('.tab.active').classList.remove('active');
-    // document.querySelector('li[onclick="showRegisterForm()"]').classList.add('active');
+    document.querySelector('.tab.active').classList.remove('active');
+    document.querySelector('li[onclick="showRegisterForm()"]').classList.add('active');
 }
 
 // Function to reset the password
@@ -60,7 +60,7 @@ function showUserOptions() {
 function logout() {
     getAuth().signOut().then(() => {
         // Redirect to the login page after successful logout
-        window.location.assign('/src/login.html');
+        window.location.reload();
     }).catch((error) => {
         console.error('Logout failed:', error);
     });
