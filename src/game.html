@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Game</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link href="https://fonts.cdnfonts.com/css/apple-chancery" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/i-insane-rush" rel="stylesheet">
+</head>
+<body>
+<div id="user-content">
+    <div class="toolbar">
+        <span>Blackjack</span>
+        <div class="user-profile" onclick="showUserOptions()">
+            <img src="img/profile_pic.png" alt="Account">
+        </div>
+    </div>
+    <div class="user-options" id="user-options">
+        <ul>
+            <li><a href="accountInformation.html">Account Information</a></li>
+            <li><a href="game.html">Blackjack</a></li>
+            <li><a href="login.html" onclick="logout()">Log Out</a></li>
+        </ul>
+    </div>
+    <div id="blackjack-table">
+        <div id="dealer-total" class="total-display">Dealer's Total: </div>
+        <div id="dealer-hand" class="hand"></div>
+        <div id="player-total" class="total-display">Player's Total: </div>
+        <div id="player-hand" class="hand"></div>
+        <div id="game-controls">
+            <button id="hit-btn" onclick="playerHits()">Hit</button>
+            <button onclick="playerStands()">Stand</button>
+            <button type="button" id="play-again-btn" onclick="startGame()" style="display: none;">Play Again</button>
+        </div>
+        <div id="status"></div>
+    </div>
+</div>
+<script src="js/blackjack.js"></script>
+</body>
+</html>
