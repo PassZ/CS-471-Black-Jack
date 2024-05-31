@@ -231,7 +231,7 @@ button:hover {
     height: 150px;
 }
 
-#game-controls button {
+.button-container button {
     margin: 5px;
     padding: 10px 20px;
     font-size: 16px;
@@ -249,14 +249,14 @@ button:hover {
     width: 100%;
 }
 
-.hand {
+.button-container{
+
     display: flex;
-    justify-content: center;
-    margin: 10px;
-    vertical-align: middle;
+
 }
 
-#game-controls button {
+.button-container button{
+
     padding: 10px 20px;
     font-size: 16px;
     margin: 5px;
@@ -265,16 +265,23 @@ button:hover {
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    display: inline-block;
+
 }
 
-#game-controls button:hover {
+.hand {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    vertical-align: middle;
+}
+
+.button-container button:hover {
     background-color: #45a049;
 }
 
 #status {
     font-size: 20px;
-    color: #dc3545;
+    color: white;
     margin-top: 10px;
     text-align: center;
 }
