@@ -1,22 +1,29 @@
 let deck = [];
-let players = [];
+let playerHand = [];
 let dealerHand = [];
-let playerHands = [];
+let playerStand = false;
 
-function startGame(numPlayers) {
-    // Clear existing hands
-    players = [];
+function startGame() {
+    playerHand = [];
     dealerHand = [];
+    playerStand = false;
 
-    // Create deck and shuffle
     deck = createDeck();
     shuffleDeck(deck);
 
-    // Deal cards to players and dealer
-    dealCards(numPlayers);
+    // Deal initial cards
+    while (playerHand.length < 2) {
+        playerHand.push(deck.pop());
+        dealerHand.push(deck.pop());
+    }
 
     // Update hands on UI
     updateHands();
+
+    document.getElementById('play-again-btn').style.display = 'none';
+    document.getElementById('hit-btn').style.display = 'inline-block';
+    document.getElementById('stand-btn').style.display = 'inline-block';
+    document.getElementById('status').textContent = '';
 }
 
 function createDeck() {
@@ -38,110 +45,123 @@ function shuffleDeck(deck) {
     }
 }
 
-function dealCards(numPlayers) {
-    // Clear hands
-    playerHands = [];
-    dealerHand = [];
-
-    // Burn the first card
-    deck.pop();
-
-    // Deal one card to each player
-    for (let i = 0; i < numPlayers; i++) {
-        playerHands.push([deck.pop()]); // Each player starts with a single card
+function getCardValue(card) {
+    if (card.value === 'A') {
+        return 11;
+    } else if (['K', 'Q', 'J'].includes(card.value)) {
+        return 10;
+    } else {
+        return parseInt(card.value);
     }
-
-    // Deal one card to the dealer
-    dealerHand.push(deck.pop());
-
-    // Deal one more card to each player
-    for (let i = 0; i < numPlayers; i++) {
-        playerHands[i].push(deck.pop());
-    }
-
-    // Deal one more card to the dealer
-    dealerHand.push(deck.pop());
-
-    return { players: playerHands, dealer: dealerHand };
 }
 
-
-function playerHits(playerIndex) {
-    console.log('Player hits');
-    players[playerIndex].push(deck.pop());
-    updateHands();
-}
-
-function playerStands(playerIndex) {
-    // Player stands, no action needed
-    // Implement logic for dealer's turn
-    dealerTurn();
-}
-
-function dealerTurn() {
-    let dealerTotal = calculateTotal(dealerHand);
-
-    // Dealer hits until their total is 17 or higher
-    while (dealerTotal < 17) {
-        dealerHand.push(deck.pop());
-        dealerTotal = calculateTotal(dealerHand);
-    }
-
-    // Update hands on UI
-    updateHands();
-}
-
-
-function playerSplit(playerIndex) {
-    players[playerIndex].push(deck.pop());
-    updateHands();
-}
-
-function calculateTotal(hand) {
+function calculateHandTotal(hand) {
     let total = 0;
     let aceCount = 0;
-
     for (let card of hand) {
-        if (card.value === 'J' || card.value === 'Q' || card.value === 'K') {
-            total += 10;
-        } else if (card.value === 'A') {
+        total += getCardValue(card);
+        if (card.value === 'A') {
             aceCount++;
-            total += 11;
-        } else {
-            total += parseInt(card.value);
         }
     }
-
-    // Adjust total for aces
     while (total > 21 && aceCount > 0) {
         total -= 10;
         aceCount--;
     }
-
     return total;
 }
 
 function updateHands() {
-    // Implement UI update logic here
+    const playerTotal = calculateHandTotal(playerHand);
+    document.getElementById('player-total').textContent = `Player's Total: ${playerTotal}`;
+
+    if (playerStand) {
+        const dealerTotal = calculateHandTotal(dealerHand);
+        document.getElementById('dealer-total').textContent = `Dealer's Total: ${dealerTotal}`;
+    } else {
+        document.getElementById('dealer-total').textContent = `Dealer's Total: ??`;
+    }
+
+    renderHands();
+
+    if (playerTotal > 21) {
+        document.getElementById('status').textContent = 'Player Busts! Dealer Wins!';
+        endGame();
+    }
 }
+
 function renderHands() {
     const playerHandDiv = document.getElementById('player-hand');
     const dealerHandDiv = document.getElementById('dealer-hand');
     playerHandDiv.innerHTML = '';
     dealerHandDiv.innerHTML = '';
 
-    for (let card of playerHand) {
+    playerHand.forEach(card => {
         const cardImg = document.createElement('img');
         cardImg.src = `img/cards/${card.value}_of_${card.suit}.png`;
+        cardImg.classList.add('card');
         playerHandDiv.appendChild(cardImg);
+    });
+
+    dealerHand.forEach((card, index) => {
+        const cardImg = document.createElement('img');
+        if (index === 0 && !playerStand) {
+            cardImg.src = `img/cards/back.png`;
+        } else {
+            cardImg.src = `img/cards/${card.value}_of_${card.suit}.png`;
+        }
+        cardImg.classList.add('card');
+        dealerHandDiv.appendChild(cardImg);
+    });
+}
+
+function playerHits() {
+    playerHand.push(deck.pop());
+    updateHands();
+}
+
+function playerStands() {
+    playerStand = true;
+    dealerTurn();
+}
+
+function dealerTurn() {
+    let dealerTotal = calculateHandTotal(dealerHand);
+    while (dealerTotal < 17) {
+        dealerHand.push(deck.pop());
+        dealerTotal = calculateHandTotal(dealerHand);
+    }
+    updateHands();
+    determineWinner();
+}
+
+function determineWinner() {
+    const playerTotal = calculateHandTotal(playerHand);
+    const dealerTotal = calculateHandTotal(dealerHand);
+
+    let result = '';
+    if (dealerTotal > 21 || playerTotal > dealerTotal) {
+        result = 'Player Wins!';
+    } else if (playerTotal < dealerTotal) {
+        result = 'Dealer Wins!';
+    } else {
+        result = 'Push!';
     }
 
-    for (let card of dealerHand) {
-        const cardImg = document.createElement('img');
-        cardImg.src = `img/cards/${card.value}_of_${card.suit}.png`;
-        dealerHandDiv.appendChild(cardImg);
-    }
+    document.getElementById('status').textContent = result;
+    endGame();
 }
-document.getElementById('hit-btn').addEventListener('click', function() {
-    playerHits();
+
+function endGame() {
+    document.getElementById('play-again-btn').style.display = 'block';
+    document.getElementById('hit-btn').style.display = 'none';
+    document.getElementById('stand-btn').style.display = 'none';
+}
+
+document.getElementById('hit-btn').addEventListener('click', playerHits);
+document.getElementById('stand-btn').addEventListener('click', playerStands);
+document.getElementById('play-again-btn').addEventListener('click', function() {
+    startGame();
 });
+
+window.addEventListener('load', startGame);

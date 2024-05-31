@@ -9,6 +9,7 @@
     <link href="https://fonts.cdnfonts.com/css/i-insane-rush" rel="stylesheet">
 </head>
 <body>
+<h1 id="pageTitle">Welcome to Blackjack</h1>
 <div id="user-content">
     <div class="toolbar">
         <span>Blackjack</span>
@@ -24,18 +25,18 @@
         </ul>
     </div>
     <div id="blackjack-table">
-        <div id="dealer-total" class="total-display">Dealer's Total: </div>
+        <div id="dealer-total" class="total-display">Dealer's Total: ??</div>
         <div id="dealer-hand" class="hand"></div>
-        <div id="player-total" class="total-display">Player's Total: </div>
+        <div id="player-total" class="total-display">Player's Total: 0</div>
         <div id="player-hand" class="hand"></div>
         <div id="game-controls">
-            <button id="hit-btn" onclick="playerHits()">Hit</button>
-            <button onclick="playerStands()">Stand</button>
-            <button type="button" id="play-again-btn" onclick="startGame()" style="display: none;">Play Again</button>
+            <button id="hit-btn">Hit</button>
+            <button id="stand-btn">Stand</button>
+            <button id="play-again-btn" style="display: none;">Play Again</button>
         </div>
         <div id="status"></div>
     </div>
 </div>
-<script src="js/blackjack.js"></script>
+<script type="module" src="js/blackjack.js"></script>
 </body>
 </html>

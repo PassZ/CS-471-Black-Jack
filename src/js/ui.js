@@ -77,6 +77,9 @@ window.showRegisterForm = showRegisterForm;
 window.showUserOptions = showUserOptions;
 window.logout = logout;
 
+document.querySelector('.user-profile').addEventListener('click', showUserOptions);
+
+
 // Add event listener for the forgot password form
 // document.getElementById('forgot-password-form').addEventListener('submit', async function(event) {
 //     event.preventDefault(); // Prevent form submission
