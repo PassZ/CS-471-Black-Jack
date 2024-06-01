@@ -30,11 +30,11 @@ onAuthStateChanged(auth, (user) => {
         if (user) {
             authContainer.style.display = 'none';
             userContent.style.display = 'block';
-            console.log('User is signed in', user);
+            // console.log('User is signed in', user);
         } else {
             authContainer.style.display = 'block';
             userContent.style.display = 'none';
-            console.log('No user is signed in');
+            // console.log('No user is signed in');
         }
     }
 
@@ -54,7 +54,7 @@ if( window.location.pathname === '/src/login.html'){
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in 
-                console.log('Logged in:', userCredential.user);
+                // console.log('Logged in:', userCredential.user);
             })
             .catch((error) => {
                 console.error('Login failed:', error);

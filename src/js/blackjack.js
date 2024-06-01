@@ -138,7 +138,7 @@ function endGame() {
         status = "Dealer wins!";
     }
     document.getElementById('status').textContent = status;
-    document.getElementById('play-again-btn').style.display = ''; // Show play again button
+    document.getElementById('play-btn').style.display = ''; // Show play again button
     document.getElementById('game-controls').querySelectorAll('button:not(#play-again-btn)').forEach(button => button.style.display = 'none');
 }
 
@@ -172,4 +172,10 @@ function updateStatus() {
     document.getElementById('status').textContent = "Choose your action!";
 }
 
-document.addEventListener('DOMContentLoaded', startGame);
+function gameInit() {
+    document.getElementById('game-controls').querySelectorAll('button:not(#play-again-btn)').forEach(button => button.style.display = 'none');
+
+    
+}
+
+document.addEventListener('DOMContentLoaded', gameInit);

@@ -19,6 +19,7 @@ onAuthStateChanged(auth, async (user) => {
                     gamesPlayed: 0,
                     gamesTied: 0,
                     gamesWon: 0,
+                    accountBalance: 0,
                     moneyDeposited: 0,
                     moneyWon: 0,
                     moneyLost: 0,
@@ -29,7 +30,10 @@ onAuthStateChanged(auth, async (user) => {
             }
         }
         else{
-            docSnap = docSnap.docs[0];
+            docSnap = docSnap.docs[0];  
+            if( !docSnap.data().accountBalance ){
+                await updateDoc( docSnap.ref , {accountBalance: 0});    
+            }
         }
 
         if( window.location.pathname === '/src/accountInformation.html'){
@@ -39,8 +43,12 @@ onAuthStateChanged(auth, async (user) => {
             document.getElementById( "winRate" ).textContent =  (Math.trunc( 10000 * (doc.gamesWon / ( doc.gamesPlayed === 0 ? 1 : doc.gamesPlayed))) / 100).toString() + "%" ;
             document.getElementById( "moneyWon" ).textContent = 0;
             document.getElementById( "moneyDeposited" ).textContent = 0;
-            document.getElementById( "accountBalance" ).textContent = 0;
-            document.getElementById( "gainLossPercent" ).textContent = 0;
+            document.getElementById( "accountBalance" ).textContent = doc.accountBalance;
+            document.getElementById( "gainLossPercent" ).textContent = doc.moneyWon / doc.moneyDeposited === 0 ? 1 : doc.moneyDeposited;
+            document.getElementById( "accountBalance" ).textContent = doc.accountBalance;
+        }
+        if( window.location.pathname === '/src/login.html' ){
+            document.getElementById( "bal" ).textContent = docSnap.data().accountBalance;
         }
     }
 });
@@ -65,7 +73,6 @@ if (statusDiv){
     observer.observe(statusDiv, config);    
 }
 
-
 async function logGameResults() {
     const result = document.getElementById('status').textContent;
     console.log( result );
@@ -88,3 +95,36 @@ async function logGameResults() {
         })
     }
 }
+
+function addMoney() {
+    document.getElementById("addMoneyDialog").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("addMoneyDialog").style.display = "none";
+}
+
+function updateBalance(amount) {
+    var currentBalance = parseInt(document.getElementById("bal").textContent);
+    var newBal = currentBalance + amount;
+    document.getElementById("bal").textContent = newBal;
+    recordNewBalance( newBal );
+    closeModal();
+}
+
+function addCustomAmount() {
+    var amount = parseInt(document.getElementById("customAmount").value);
+    if (!isNaN(amount)) {
+        updateBalance(amount);
+    }
+}
+
+async function recordNewBalance( newBal ){
+    await updateDoc( docSnap.ref , {
+        accountBalance: newBal
+    })
+}
+window.addCustomAmount = addCustomAmount;
+window.addMoney = addMoney;
+window.closeModal = closeModal;
+window.updateBalance = updateBalance;
