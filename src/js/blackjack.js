@@ -1,130 +1,159 @@
-const suits = ['clubs', 'diamonds', 'hearts', 'spades'];
-const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'];
-
 let deck = [];
-let dealerHand = [];
 let playerHand = [];
-let gameActive = true;
+let dealerHand = [];
+let playerStand = false;
 
-function createDeck() {
-    deck = [];
-    for (let suit of suits) {
-        for (let value of values) {
-            deck.push({ value, suit, imageUrl: `img/${value}_of_${suit}.png` });
-        }
+function startGame() {
+    playerHand = [];
+    dealerHand = [];
+    playerStand = false;
+
+    deck = createDeck();
+    shuffleDeck(deck);
+
+    // Deal initial cards
+    while (playerHand.length < 2) {
+        playerHand.push(deck.pop());
+        dealerHand.push(deck.pop());
     }
-    shuffleDeck();
+
+    // Update hands on UI
+    updateHands();
+
+    document.getElementById('play-again-btn').style.display = 'none';
+    document.getElementById('hit-btn').style.display = 'inline-block';
+    document.getElementById('stand-btn').style.display = 'inline-block';
+    document.getElementById('status').textContent = '';
 }
 
-function shuffleDeck() {
+function createDeck() {
+    const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
+    const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    const deck = [];
+    for (let suit of suits) {
+        for (let value of values) {
+            deck.push({ suit, value });
+        }
+    }
+    return deck;
+}
+
+function shuffleDeck(deck) {
     for (let i = deck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [deck[i], deck[j]] = [deck[j], deck[i]];
     }
 }
 
-function startGame() {
-    gameActive = true;
-    createDeck();
-    dealerHand = [deck.pop(), deck.pop()];
-    playerHand = [deck.pop(), deck.pop()];
-    displayHands();
-    checkInitialBlackjack();
-    updateStatus();
-    document.getElementById('play-again-btn').style.display = 'none';
-    document.getElementById('game-controls').querySelectorAll('button:not(#play-again-btn)').forEach(button => button.style.display = '');
-}
-
-function checkInitialBlackjack() {
-    const playerValue = getHandValue(playerHand);
-    if (playerValue.value === 21) {
-        document.getElementById('status').textContent = "Blackjack! Player wins!";
-        gameActive = false;
-        displayFullDealerHand();
+function getCardValue(card) {
+    if (card.value === 'A') {
+        return 11;
+    } else if (['K', 'Q', 'J'].includes(card.value)) {
+        return 10;
+    } else {
+        return parseInt(card.value);
     }
 }
 
-function displayHands() {
-    displayHand('dealer-hand', dealerHand, false);
-    displayHand('player-hand', playerHand, true);
-    autoStandCheck();
-}
-
-function displayHand(elementId, hand, isPlayer) {
-    const handDiv = document.getElementById(elementId);
-    handDiv.innerHTML = '';
-    if (elementId === 'dealer-hand' && gameActive) {
-        handDiv.innerHTML += `<img src="img/back.png" alt="Face Down Card" class="card-back">`; // Face down for the first card
-        handDiv.innerHTML += `<img src="${hand[1].imageUrl}" alt="${hand[1].value} of ${hand[1].suit}">`;
-        document.getElementById('dealer-total').textContent = `Dealer's Total: ${getHandValue([hand[1]]).value}`;
-    } else {
-        hand.forEach(card => handDiv.innerHTML += `<img src="${card.imageUrl}" alt="${card.value} of ${card.suit}">`);
-        let total = getHandValue(hand);
-        if (isPlayer) {
-            document.getElementById('player-total').textContent = `Player Total: ${total.text}`;
-        } else {
-            document.getElementById('dealer-total').textContent = `Dealer's Total: ${total.text}`;
+function calculateHandTotal(hand) {
+    let total = 0;
+    let aceCount = 0;
+    for (let card of hand) {
+        total += getCardValue(card);
+        if (card.value === 'A') {
+            aceCount++;
         }
     }
+    while (total > 21 && aceCount > 0) {
+        total -= 10;
+        aceCount--;
+    }
+    return total;
 }
 
-function displayFullDealerHand() {
-    const handDiv = document.getElementById('dealer-hand');
-    handDiv.innerHTML = '';
-    dealerHand.forEach(card => handDiv.innerHTML += `<img src="${card.imageUrl}" alt="${card.value} of ${card.suit}">`);
-    let total = getHandValue(dealerHand);
-    document.getElementById('dealer-total').textContent = `Dealer's Total: ${total.text}`;
+function updateHands() {
+    const playerTotal = calculateHandTotal(playerHand);
+    document.getElementById('player-total').textContent = `Player's Total: ${playerTotal}`;
+
+    if (playerStand) {
+        const dealerTotal = calculateHandTotal(dealerHand);
+        document.getElementById('dealer-total').textContent = `Dealer's Total: ${dealerTotal}`;
+    } else {
+        document.getElementById('dealer-total').textContent = `Dealer's Total: ??`;
+    }
+
+    renderHands();
+
+    if (playerTotal > 21) {
+        document.getElementById('status').textContent = 'Player Busts! Dealer Wins!';
+        endGame();
+    }
+}
+
+function renderHands() {
+    const playerHandDiv = document.getElementById('player-hand');
+    const dealerHandDiv = document.getElementById('dealer-hand');
+    playerHandDiv.innerHTML = '';
+    dealerHandDiv.innerHTML = '';
+
+    playerHand.forEach(card => {
+        const cardImg = document.createElement('img');
+        cardImg.src = `img/cards/${card.value}_of_${card.suit}.png`;
+        cardImg.classList.add('card');
+        playerHandDiv.appendChild(cardImg);
+    });
+
+    dealerHand.forEach((card, index) => {
+        const cardImg = document.createElement('img');
+        if (index === 0 && !playerStand) {
+            cardImg.src = `img/cards/back.png`;
+        } else {
+            cardImg.src = `img/cards/${card.value}_of_${card.suit}.png`;
+        }
+        cardImg.classList.add('card');
+        dealerHandDiv.appendChild(cardImg);
+    });
 }
 
 function playerHits() {
-    if (!gameActive) return;
     playerHand.push(deck.pop());
-    displayHands();
-    if (getHandValue(playerHand).value > 21) {
-        document.getElementById('status').textContent = "Player busts!";
-        gameActive = false;
-    }
+    updateHands();
 }
 
 function playerStands() {
-    if (!gameActive) return;
-    gameActive = false;
-    updatePlayerTotalOnStand(); // Update the player total on stand if it's a soft total
-    dealerPlays();
-    document.getElementById('game-controls').querySelectorAll('button:not(#play-again-btn)').forEach(button => button.style.display = 'none');
-    document.getElementById('play-again-btn').style.display = '';
+    playerStand = true;
+    dealerTurn();
 }
 
-function updatePlayerTotalOnStand() {
-    const playerValue = getHandValue(playerHand);
-    // Update the display to show only the higher value if it's a soft total
-    if (playerValue.text.indexOf('/') !== -1) {
-        document.getElementById('player-total').textContent = `Player Total: ${Math.max(...playerValue.text.split('/'))}`;
-    }
-}
-
-function autoStandCheck() {
-    const playerValue = getHandValue(playerHand);
-    // Auto stand if the total is 17 or more and it's not a soft total
-    if (playerValue.value >= 17 && playerValue.text.indexOf('/') === -1) {
-        document.getElementById('status').textContent = "Auto-stand on hard 17 or higher";
-        playerStands();
-    }
-}
-
-async function dealerPlays() {
-    displayHand('dealer-hand', dealerHand, false);
-    let dealerValue = getHandValue(dealerHand);
-    while (dealerValue.value < 17) {
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Delay for 1 second
+function dealerTurn() {
+    let dealerTotal = calculateHandTotal(dealerHand);
+    while (dealerTotal < 17) {
         dealerHand.push(deck.pop());
-        displayHand('dealer-hand', dealerHand, false);
-        dealerValue = getHandValue(dealerHand);
+        dealerTotal = calculateHandTotal(dealerHand);
     }
+    updateHands();
+    determineWinner();
+}
+
+function determineWinner() {
+    const playerTotal = calculateHandTotal(playerHand);
+    const dealerTotal = calculateHandTotal(dealerHand);
+
+    let result = '';
+    if (dealerTotal > 21 || playerTotal > dealerTotal) {
+        result = 'Player Wins!';
+    } else if (playerTotal < dealerTotal) {
+        result = 'Dealer Wins!';
+    } else {
+        result = 'Push!';
+    }
+
+    document.getElementById('status').textContent = result;
     endGame();
 }
 
 function endGame() {
+<<<<<<< HEAD
     const dealerValue = getHandValue(dealerHand);
     const playerValue = getHandValue(playerHand);
     let status = "Draw!";
@@ -140,32 +169,20 @@ function endGame() {
     document.getElementById('status').textContent = status;
     document.getElementById('play-btn').style.display = ''; // Show play again button
     document.getElementById('game-controls').querySelectorAll('button:not(#play-again-btn)').forEach(button => button.style.display = 'none');
+=======
+    document.getElementById('play-again-btn').style.display = 'block';
+    document.getElementById('hit-btn').style.display = 'none';
+    document.getElementById('stand-btn').style.display = 'none';
+>>>>>>> 7a34d729f5a0e0c4562a39f02632c92a52637cad
 }
 
-function getHandValue(hand) {
-    let value = 0;
-    let softValue = 0;
-    let hasAce = false;
-    hand.forEach(card => {
-        if (card.value === 'ace') {
-            hasAce = true;
-            value += 1;
-            softValue += 11;
-        } else if (['jack', 'queen', 'king'].includes(card.value)) {
-            value += 10;
-            softValue += 10;
-        } else {
-            value += parseInt(card.value);
-            softValue += parseInt(card.value);
-        }
-    });
-    if (softValue > 21) softValue = value;
-    return {
-        value: softValue,
-        text: hasAce && softValue != value ? `${value}/${softValue}` : `${softValue}`
-    };
-}
+document.getElementById('hit-btn').addEventListener('click', playerHits);
+document.getElementById('stand-btn').addEventListener('click', playerStands);
+document.getElementById('play-again-btn').addEventListener('click', function() {
+    startGame();
+});
 
+<<<<<<< HEAD
 function updateStatus() {
     const playerTotal = getHandValue(playerHand);
     document.getElementById('player-total').textContent = `Player Total: ${playerTotal.text}`;
@@ -179,3 +196,6 @@ function gameInit() {
 }
 
 document.addEventListener('DOMContentLoaded', gameInit);
+=======
+window.addEventListener('load', startGame);
+>>>>>>> 7a34d729f5a0e0c4562a39f02632c92a52637cad

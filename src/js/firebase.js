@@ -18,9 +18,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-export const auth = getAuth(app);
+const auth = getAuth(app);
+export { app, analytics, auth };
 
 // Listen to the authentication state
 onAuthStateChanged(auth, (user) => {
@@ -60,19 +61,62 @@ if( window.location.pathname === '/src/login.html'){
                 console.error('Login failed:', error);
             });
     });
-
-    // Register event listener
-    document.getElementById('register-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const email = document.getElementById('register-email').value;
-        const password = document.getElementById('register-password').value;
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Registered but not logged in
-                console.log('Registered:', userCredential.user);
-            })
-            .catch((error) => {
-                console.error('Registration failed:', error);
-            });
-    });
 }
+    // // Login event listener
+    // document.getElementById('login-form').addEventListener('submit', function(event) {
+    //     event.preventDefault();
+    //     const email = document.getElementById('login-email').value;
+    //     const password = document.getElementById('login-password').value;
+    //     signInWithEmailAndPassword(auth, email, password)
+    //         .then((userCredential) => {
+    //             // Signed in
+    //             console.log('Logged in:', userCredential.user);
+    //             window.location.href = '/src/game.html';
+    //         })
+    //         .catch((error) => {
+    //             console.error('Login failed:', error);
+    //             alert('Login failed! Please try again.');
+    //         });
+    // });
+
+    // // Register event listener
+    // document.getElementById('register-form').addEventListener('submit', function(event) {
+    //     event.preventDefault();
+    //     const email = document.getElementById('register-email').value;
+    //     const password = document.getElementById('register-password').value;
+    //     createUserWithEmailAndPassword(auth, email, password)
+    //         .then((userCredential) => {
+    //             // Registered but not logged in
+    //             console.log('Registered:', userCredential.user);
+    //         })
+    //         .catch((error) => {
+    //             console.error('Registration failed:', error);
+    //         });
+    // });
+
+
+function backToLogin() {
+    // Redirect to the login page
+    window.location.href = 'login.html';
+}
+function resetPassword() {
+    const email = document.getElementById('forgot-password-email').value;
+    if (!email) {
+        alert('Please enter your email address.');
+        return;
+    }
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, email)
+        .then(() => {
+            alert('Password reset email sent!');
+        })
+        .catch((error) => {
+            alert('Error sending password reset email: ' + error.message);
+        });
+}
+// document.getElementById('back-button').addEventListener('click', backToLogin);
+
+// document.getElementById('forgot-password-form').addEventListener('submit', resetPassword);
+
+
+
