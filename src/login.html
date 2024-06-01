@@ -29,7 +29,7 @@
                     margin-left: -1%;
                     margin-top: -1.5%;
                     vertical-align: middle;
-                    horiz-align: center">
+                    horiz-align: center;">
             </div>
             <button type="submit" id="login-button">Login</button>
         </form>
@@ -39,29 +39,6 @@
         </div>
     </div>
     <div id="user-content" style="display:none;">
-        <div id="blackjack-table">
-            <div id="dealer-total" class="total-display">Dealer's Total: </div>
-            <div id="dealer-hand" class="hand"></div>
-            <div id="player-total" class="total-display">Player's Total: </div>
-            <div id="player-hand" class="hand"></div>
-            <div class="button-container" id="game-controls">
-                <button id="player-hit-btn" onclick="playerHits()">Hit</button>
-                <button id="player-stand-btn" onclick="playerStands()">Stand</button>
-                <button id="player-split-btn" onclick="playerSplit()">Split</button>
-                <button id="player-double-btn" onclick="playerDoubles()">Double</button>
-                <button id="player-insurance-btn" onclick="playerInsurance()">Insurance</button>
-            </div>
-            <div id="play-btn" class="button-container" style="display:none;">
-                <button id="play-again" onclick="startGame()" >Play Again</button>
-                <button id="play-with-bet" onclick="startGame()" >Place bet and Play</button>
-            </div>
-            <div id="status"></div>
-            <div id ="balance" class="balance">
-                Balance: $ 
-                <div id="bal">0</div>
-            <button class="add-balance" onClick="addMoney()">+</button>
-        </div>
-        </div>
         <div class="toolbar">
             <span>Blackjack</span>
             <div class="user-profile" onclick="showUserOptions()">

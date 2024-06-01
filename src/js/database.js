@@ -6,13 +6,12 @@ let db = getFirestore(app);
 const stats = collection(db, "UserStats");
 let docSnap = null;
 
-
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         const q = query(stats, where( "userID" , "==", auth.currentUser.uid));
         docSnap = await getDocs( q );
         const c = docSnap.size;
-        if( c === 0 ){        
+        if( c === 0 ){
             try {
                 docSnap = await addDoc(collection(db , "UserStats"), {
                     gamesLost: 0,
@@ -47,7 +46,7 @@ onAuthStateChanged(auth, async (user) => {
             document.getElementById( "gainLossPercent" ).textContent = doc.moneyWon / doc.moneyDeposited === 0 ? 1 : doc.moneyDeposited;
             document.getElementById( "accountBalance" ).textContent = doc.accountBalance;
         }
-        if( window.location.pathname === '/src/login.html' ){
+        if( window.location.pathname === '/src/game.html' ){
             document.getElementById( "bal" ).textContent = docSnap.data().accountBalance;
         }
     }
@@ -80,7 +79,7 @@ async function logGameResults() {
         await updateDoc( docSnap.ref , {
             gamesPlayed: increment(1),
             gamesLost: increment(1)
-        });       
+        });q       
     }
     else if( result === 'Draw!'){
         await updateDoc(docSnap.ref , {

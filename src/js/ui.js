@@ -1,19 +1,20 @@
 // Import necessary Firebase functions
 import { getAuth, sendPasswordResetEmail, signOut , onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+import {auth } from './firebase.js';
 
 // Show login form and hide register form
-// function showLoginForm() {
-//     // Set the display of the login form to block and register form to none
-//     document.getElementById('login-form-container').style.display = 'block';
-//     // document.getElementById('register-form-container').style.display = 'none';
-//
-//     // Set the forgot password link to display for the login form
-//     // document.getElementById('forgot-password-link').style.display = 'block';
-//
-//     // Update the active tab styling
-//     // document.querySelector('.tab.active').classList.remove('active');
-//     // document.querySelector('li[onclick="showLoginForm()"]').classList.add('active');
-// }
+function showLoginForm() {
+    // Set the display of the login form to block and register form to none
+    document.getElementById('login-form-container').style.display = 'block';
+    // document.getElementById('register-form-container').style.display = 'none';
+
+    // Set the forgot password link to display for the login form
+    // document.getElementById('forgot-password-link').style.display = 'block';
+
+    // Update the active tab styling
+    // document.querySelector('.tab.active').classList.remove('active');
+    // document.querySelector('li[onclick="showLoginForm()"]').classList.add('active');
+}
 
 // Show register form and hide login form
 function showRegisterForm() {
@@ -49,11 +50,14 @@ function showRegisterForm() {
 // Function to toggle the display of user options
 function showUserOptions() {
     const userOptions = document.querySelector('.user-options');
-    if (userOptions.style.display === 'block') {
+    if( userOptions.style.display === 'block' ){
         userOptions.style.display = 'none';
-    } else {
+    }
+    else{
         userOptions.style.display = 'block';
     }
+
+
 }
 
 // Implement the logout functionality
@@ -66,9 +70,9 @@ function logout() {
     });
 }
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     showLoginForm(); // This will ensure the login form is visible on page load
-// });
+document.addEventListener('DOMContentLoaded', () => {
+    showLoginForm(); // This will ensure the login form is visible on page load
+});
 
 // Expose functions to global scope
 window.showLoginForm = showLoginForm;
@@ -77,7 +81,7 @@ window.showRegisterForm = showRegisterForm;
 window.showUserOptions = showUserOptions;
 window.logout = logout;
 
-document.querySelector('.user-profile').addEventListener('click', showUserOptions);
+// document.querySelector('.user-profile').addEventListener('click', showUserOptions);
 
 
 // Add event listener for the forgot password form

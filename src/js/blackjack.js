@@ -153,7 +153,6 @@ function determineWinner() {
 }
 
 function endGame() {
-<<<<<<< HEAD
     const dealerValue = getHandValue(dealerHand);
     const playerValue = getHandValue(playerHand);
     let status = "Draw!";
@@ -169,11 +168,6 @@ function endGame() {
     document.getElementById('status').textContent = status;
     document.getElementById('play-btn').style.display = ''; // Show play again button
     document.getElementById('game-controls').querySelectorAll('button:not(#play-again-btn)').forEach(button => button.style.display = 'none');
-=======
-    document.getElementById('play-again-btn').style.display = 'block';
-    document.getElementById('hit-btn').style.display = 'none';
-    document.getElementById('stand-btn').style.display = 'none';
->>>>>>> 7a34d729f5a0e0c4562a39f02632c92a52637cad
 }
 
 document.getElementById('hit-btn').addEventListener('click', playerHits);
@@ -182,7 +176,6 @@ document.getElementById('play-again-btn').addEventListener('click', function() {
     startGame();
 });
 
-<<<<<<< HEAD
 function updateStatus() {
     const playerTotal = getHandValue(playerHand);
     document.getElementById('player-total').textContent = `Player Total: ${playerTotal.text}`;
@@ -190,12 +183,8 @@ function updateStatus() {
 }
 
 function gameInit() {
-    document.getElementById('game-controls').querySelectorAll('button:not(#play-again-btn)').forEach(button => button.style.display = 'none');
-
-    
+    document.getElementById('game-controls').querySelectorAll('button:not(#play-btn)').forEach(button => button.style.display = 'none');
 }
 
 document.addEventListener('DOMContentLoaded', gameInit);
-=======
 window.addEventListener('load', startGame);
->>>>>>> 7a34d729f5a0e0c4562a39f02632c92a52637cad

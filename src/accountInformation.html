@@ -8,14 +8,10 @@
     <link href="https://fonts.cdnfonts.com/css/i-insane-rush" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css">
     <style>
-        .user-profile img {
-            width: 50px;
-            padding-right: 20px;
-        }
         :root {
             --bs-body-font-family: "Times New Roman";
         }
-        .card {
+        .card-body {
             width: auto;
             white-space: nowrap;
             font-family: "Times New Roman";
@@ -28,28 +24,29 @@
         p {
             font-family: "Times New Roman";
             font-size: 16px;
-            color:blueviolet;
+            color:#000000;
             
+        }
+        .user-profile img{
+            padding-right: 30px;
         }
     </style>
 </head>
 <body>
-<div id="user-content" style="display:block;">
     <div class="container">
-            <div class="toolbar">
-
-                <span>Account Information</span>
-                <div class="user-profile" onclick="showUserOptions()">
-                    <img src="img/profile_pic.png" alt="Account">
-                </div>
+        <div class="toolbar">
+            <span>Account Information</span>
+            <div class="user-profile" onclick="showUserOptions()">
+                <img src="img/profile_pic.png" alt="Account">
             </div>
-            <div class="user-options" style="display:none;">
-                <ul>
-                    <li><a href="accountInformation.html">Account Information</a></li>
-                    <li><a href = "login.html">Blackjack</a></li>
-                    <li><a href="#" onclick="logout()">Log Out</a></li>
-                </ul>
-            </div>
+        </div>
+        <div class="user-options" id="user-options" >
+            <ul>
+                <li><a href="accountInformation.html">Account Information</a></li>
+                <li><a href="game.html">Blackjack</a></li>
+                <li><a href="login.html" onclick="logout()">Log Out</a></li>
+            </ul>
+        </div>
         <div class="row">
             <div class="card">
                 <div class="card-body">
@@ -71,7 +68,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <script type="module" src="js/firebase.js"></script>
     <script type="module" src="js/ui.js"></script>
