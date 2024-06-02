@@ -57,8 +57,11 @@ if (statusDiv){
     const observer = new MutationObserver((mutations) => {
         for (let mutation of mutations) {
             if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                if(statusDiv.textContent !== '' ){
+                if(statusDiv.textContent !== '' && statusDiv.textContent !== 'bet' ){
                     logGameResults();
+                }
+                else if( statusDiv.textContent === 'bet'){
+                    subtractBet( parseInt( document.getElementById('bet').textContent));
                 }
             }
         }
@@ -72,47 +75,45 @@ if (statusDiv){
     observer.observe(statusDiv, config);    
 }
 
-
-document.addEventListener('DOMContentLoaded' , function() {
-    document.getElementById( 'startGameWithBet' ).addEventListener( 'click' , function() {
-        var betAmount = parseInt( document.getElementById('currentBet').textContent.replace( '$' , '') );
-        var newBalance = docSnap.data().accountBalance - betAmount;
-        subtractBet( newBalance );        
-    })
-})
-
-async function queryDB (){
-    const q = await getDocs( query( stats, where( "userID" , "==" , auth.currentUser.uid)) );
-    return q.docs[0].data();
-}
 async function subtractBet( val ) {
-    await updateDoc( docSnap.ref , {
-        accountBalance: val
+    const q = await getDocs( query( stats, where( "userID" , "==" , auth.currentUser.uid)) );
+    const re = q.docs[0];
+    const docSnap = q.docs[0].data();
+    const newBal = docSnap.accountBalance - val;
+    await updateDoc( re.ref , {
+        accountBalance: newBal
     });
-    const newref = await queryDB()
-    document.getElementById('bal').textContent = newref.accountBalance;
+    document.getElementById('bal').textContent = newBal;
 }
 
 async function logGameResults() {
     const result = document.getElementById('gameResult').textContent;
+    const q = await getDocs( query( stats, where( "userID" , "==" , auth.currentUser.uid)) );
+    const docSnapNew = q.docs[0];
     console.log( result );
+    console.log( docSnapNew.data().accountBalance );
+    const bet = document.getElementById( 'bet' ).textContent;
     if(  result === 'lose' || result === "Dealer wins!"){
-        await updateDoc( docSnap.ref , {
+        await updateDoc( docSnapNew.ref , {
             gamesPlayed: increment(1),
             gamesLost: increment(1)
         });
     }
     else if( result === 'tie!'){
-        await updateDoc(docSnap.ref , {
+        await updateDoc(docSnapNew.ref , {
             gamesTied: increment(1),
-            gamesPlayed: increment(1)
+            gamesPlayed: increment(1),
+            accountBalance: increment( bet )
         });
+        document.getElementById('bal').textContent = docSnapNew.data().accountBalance + bet;
     }
     else if (result === "Player wins!" || result === "win" ){
-        await updateDoc( docSnap.ref , {
+        await updateDoc( docSnapNew.ref , {
             gamesWon: increment(1),
-            gamesPlayed: increment(1)
-        })
+            gamesPlayed: increment(1),
+            accountBalance: increment( 1.5 * bet )
+        });
+        document.getElementById('bal').textContent = docSnapNew.data().accountBalance + 1.5 * bet;
     }
 }
 

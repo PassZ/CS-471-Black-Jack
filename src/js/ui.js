@@ -5,7 +5,7 @@ import {auth } from './firebase.js';
 // Show login form and hide register form
 function showLoginForm() {
     // Set the display of the login form to block and register form to none
-    document.getElementById('login-form-container').style.display = 'block';
+    // document.getElementById('login-form-container').style.display = 'block';
     // document.getElementById('register-form-container').style.display = 'none';
 
     // Set the forgot password link to display for the login form

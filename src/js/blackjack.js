@@ -24,7 +24,6 @@ function startGame() {
     // document.getElementById('play-again-btn').style.display = 'none';
     // document.getElementById('hit-btn').style.display = 'inline-block';
     // document.getElementById('stand-btn').style.display = 'inline-block';
-    document.getElementById('gameResult').textContent = '';
     document.getElementById('status').textContent = '';
     document.getElementById('game-controls').style.display = 'block';
     document.getElementById('play-btn').style.display = 'none';
@@ -149,10 +148,11 @@ function determineWinner() {
     let result = '';
     if( playerTotal > 21 ){
         result = 'Dealer Wins!'
-        document.getElementById( 'gameResult' ).textContent = 'win';
+        document.getElementById( 'gameResult' ).textContent = 'lose';
+
     } else if (dealerTotal > 21 || playerTotal > dealerTotal) {
         result = 'Player Wins!';
-        document.getElementById( 'gameResult' ).textContent = 'lose';
+        document.getElementById( 'gameResult' ).textContent = 'win';
     } else if (playerTotal < dealerTotal) {
         result = 'Dealer Wins!';
         document.getElementById( 'gameResult' ).textContent = 'lose';
@@ -163,26 +163,27 @@ function determineWinner() {
     document.getElementById('status').textContent = result;
     document.getElementById('game-controls').style.display = 'none';
     document.getElementById('play-btn').style.display = 'block';
+    document.getElementById('betAmount').value = '';
 }
 
-function endGame() {
-    const dealerValue = calculateHandTotal(dealerHand);
-    const playerValue = calculateHandTotal(playerHand);
-    let status = "Draw!";
-    if (playerValue.value > 21) {
-        status = "Dealer wins, player busts!";
-    } else if (dealerValue.value > 21) {
-        status = "Player wins, dealer busts!";
-    } else if (playerValue.value > dealerValue.value) {
-        status = "Player wins!";
-    } else if (dealerValue.value > playerValue.value) {
-        status = "Dealer wins!";
-    }
-    document.getElementById('status').textContent = status;
-    document.getElementById('game-controls').style.display = 'none';
-    document.getElementById('play-btn').style.display = 'block';
-    document.getElementById( 'currentBet' ).textContent = '$0';
-}
+// function endGame() {
+//     const dealerValue = calculateHandTotal(dealerHand);
+//     const playerValue = calculateHandTotal(playerHand);
+//     let status = "Draw!";
+//     if (playerValue.value > 21) {
+//         status = "Dealer wins, player busts!";
+//     } else if (dealerValue.value > 21) {
+//         status = "Player wins, dealer busts!";
+//     } else if (playerValue.value > dealerValue.value) {
+//         status = "Player wins!";
+//     } else if (dealerValue.value > playerValue.value) {
+//         status = "Dealer wins!";
+//     }
+//     document.getElementById('status').textContent = status;
+//     document.getElementById('game-controls').style.display = 'none';
+//     document.getElementById('play-btn').style.display = 'block';
+//     document.getElementById( 'vet' ).textContent = '0';
+// }
 
 function updateStatus() {
     const playerTotal = calculateHandTotal(playerHand);
@@ -191,23 +192,25 @@ function updateStatus() {
 }
 
 function gameInit() {
-    document.getElementById('game-controls').style.display = 'none';
-    const playerHandDiv = document.getElementById('player-hand');
-    const dealerHandDiv = document.getElementById('dealer-hand');
-    playerHandDiv.innerHTML = '';
-    dealerHandDiv.innerHTML = '';
-    for( let i = 0; i < 2; i++ ){
-        const cardImg = document.createElement('img');
-        cardImg.src = `img/cards/back.png`;
-        cardImg.classList.add('card');
-        playerHandDiv.appendChild(cardImg);
-    };
-    for( let i = 0; i < 2; i++ ){
-        const cardImg = document.createElement('img');
-        cardImg.src = `img/cards/back.png`;
-        cardImg.classList.add('card');
-        dealerHandDiv.appendChild(cardImg);
-    };
+    if( window.location.pathname === '/src/game.html'){
+        document.getElementById('game-controls').style.display = 'none';
+        const playerHandDiv = document.getElementById('player-hand');
+        const dealerHandDiv = document.getElementById('dealer-hand');
+        playerHandDiv.innerHTML = '';
+        dealerHandDiv.innerHTML = '';
+        for( let i = 0; i < 2; i++ ){
+            const cardImg = document.createElement('img');
+            cardImg.src = `img/cards/back.png`;
+            cardImg.classList.add('card');
+            playerHandDiv.appendChild(cardImg);
+        };
+        for( let i = 0; i < 2; i++ ){
+            const cardImg = document.createElement('img');
+            cardImg.src = `img/cards/back.png`;
+            cardImg.classList.add('card');
+            dealerHandDiv.appendChild(cardImg);
+        };
+    }
 }
 
 function showBetModal() {
@@ -217,11 +220,16 @@ function closeBetModal() {
     document.getElementById('betModal').style.display = 'none';
 }
 
+function startGameWithoutBet() {
+    document.getElementById( 'bet' ).textContent = '0';
+    document.getElementById('gameResult').textContent = '';
+}
+
 function startGameWithBet() {
     betAmount = parseFloat(document.getElementById('betAmount').value);
     if (!isNaN(betAmount) && betAmount > 0) {
-        console.log("Starting game with bet: $" + betAmount);
-        document.getElementById( "currentBet").textContent = '$' + betAmount;
+        document.getElementById( "bet").textContent = betAmount;
+        document.getElementById('gameResult').textContent = 'bet';
         closeBetModal();
         startGame();
     } else {
