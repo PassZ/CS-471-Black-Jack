@@ -145,6 +145,7 @@ button:hover {
 
 .form-container.active {
     display: block;
+    background-color: #333;
 }
 
 #pageTitle {
@@ -340,6 +341,7 @@ button:hover {
 .card-title {
     font-size: 20px;
     margin-top: 0px;
+    color: #000000;
 }
 .info {
     margin: 10px 0;
@@ -352,19 +354,45 @@ button:hover {
     padding: 120px; 
 }
 .balance {
-    position: fixed;
     color:#ffffff;
-    bottom: 10px; 
-    right: 10px; 
     background-color: #333333;
-    border: 2px solid #ddd;
     border-radius: 10px;
     padding: 5px 10px;
     display: flex;
-    align-items: center;
     font-size: 18px;
     z-index: 1000; 
+}
+
+.money-container {
+    position: fixed; /* Fixed position */
+    bottom: 10px; /* 10px from the bottom */
+    right: 10px; /* 10px from the right */
+    display: flex; /* Layout children in a row */
+    align-items: center;
+    border: 2px solid #ddd; /* Align items vertically */
+    background-color: #333333; /* Light background for visibility */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px 10px; /* Padding around the boxes */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow for depth */
+}
+
+
+.balance-box {
+    padding: 5px 10px; /* Padding inside each box */
+    background-color: #858585; /* White background for each box */
+    border-radius: 5px; /* Rounded corners for each box */
+    border: 2px solid #ddd;
     white-space: nowrap;
+}
+
+.bet-box {
+    padding: 11px 10px; /* Padding inside each box */
+    background-color: #858585; /* White background for each box */
+    border-radius: 5px; /* Rounded corners for each box */
+    border: 2px solid #ddd;
+    white-space: nowrap;
+    margin-left: 10px; /* Space between balance and bet boxes */
+    border-left: 2px solid #ddd; /* Visual separation */
 }
 
 .add-balance {
@@ -372,10 +400,11 @@ button:hover {
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 3px 6px;
+    padding: 6px 6px;
     margin-left: 10px;
     cursor: pointer;
     font-size: 16px;
+    width: 30px;
 }
 
 #bal{
@@ -400,7 +429,8 @@ button:hover {
     margin: 15% auto; 
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 20%;
+    min-width: 200px;
 }
 
 .close {
@@ -425,3 +455,24 @@ input[type="number"] {
     border-radius: 4px;
 }
 
+.add-money{
+    color:#333;
+    text-align: center;
+    font-size: 20px;
+}
+
+.input-container {
+    display: flex;  
+    align-items: center; 
+    gap: 10px;  
+}
+
+.input-container input[type="number"], .input-container button {
+    flex: 1;  
+    padding: 8px; 
+    margin: 0;
+}
+
+.input-container button {
+    flex: none;  
+}

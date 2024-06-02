@@ -52,12 +52,12 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-const statusDiv = document.getElementById('status');
+const statusDiv = document.getElementById('gameResult');
 if (statusDiv){
     const observer = new MutationObserver((mutations) => {
         for (let mutation of mutations) {
             if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                if(statusDiv.textContent !== 'Choose your action!' && statusDiv.textContent !== 'Auto-stand on hard 17 or higher'){
+                if(statusDiv.textContent !== '' ){
                     logGameResults();
                 }
             }
@@ -72,22 +72,43 @@ if (statusDiv){
     observer.observe(statusDiv, config);    
 }
 
+
+document.addEventListener('DOMContentLoaded' , function() {
+    document.getElementById( 'startGameWithBet' ).addEventListener( 'click' , function() {
+        var betAmount = parseInt( document.getElementById('currentBet').textContent.replace( '$' , '') );
+        var newBalance = docSnap.data().accountBalance - betAmount;
+        subtractBet( newBalance );        
+    })
+})
+
+async function queryDB (){
+    const q = await getDocs( query( stats, where( "userID" , "==" , auth.currentUser.uid)) );
+    return q.docs[0].data();
+}
+async function subtractBet( val ) {
+    await updateDoc( docSnap.ref , {
+        accountBalance: val
+    });
+    const newref = await queryDB()
+    document.getElementById('bal').textContent = newref.accountBalance;
+}
+
 async function logGameResults() {
-    const result = document.getElementById('status').textContent;
+    const result = document.getElementById('gameResult').textContent;
     console.log( result );
-    if(  result === "Dealer wins, player busts!" || result === "Dealer wins!"){
+    if(  result === 'lose' || result === "Dealer wins!"){
         await updateDoc( docSnap.ref , {
             gamesPlayed: increment(1),
             gamesLost: increment(1)
-        });q       
+        });
     }
-    else if( result === 'Draw!'){
+    else if( result === 'tie!'){
         await updateDoc(docSnap.ref , {
             gamesTied: increment(1),
             gamesPlayed: increment(1)
         });
     }
-    else if (result === "Player wins!" || result === "Player wins, dealer busts!" ){
+    else if (result === "Player wins!" || result === "win" ){
         await updateDoc( docSnap.ref , {
             gamesWon: increment(1),
             gamesPlayed: increment(1)
@@ -116,6 +137,7 @@ function addCustomAmount() {
     if (!isNaN(amount)) {
         updateBalance(amount);
     }
+    document.getElementById('customAmount').value = '';
 }
 
 async function recordNewBalance( newBal ){

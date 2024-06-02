@@ -29,7 +29,7 @@
         <div id="dealer-hand" class="hand"></div>
         <div id="player-total" class="total-display">Player's Total: </div>
         <div id="player-hand" class="hand"></div>
-        <div class="button-container" id="game-controls">
+        <div id="game-controls" style="display:none;" class="button-container">
             <button id="player-hit-btn" onclick="playerHits()">Hit</button>
             <button id="player-stand-btn" onclick="playerStands()">Stand</button>
             <button id="player-split-btn" onclick="playerSplit()">Split</button>
@@ -38,42 +38,45 @@
         </div>
         <div id="play-btn" class="button-container" style="display:block;">
             <button id="play-again" onclick="startGame()" >Play </button>
-            <button id="play-with-bet" onclick="startGame()" >Place bet and Play</button>
+            <button id="play-with-bet" onclick="showBetModal()" >Place bet and Play</button>
+            <div id="betModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeBetModal()">&times;</span>
+                    <div>Enter Your Bet</div>
+                    <input type="number" id="betAmount" placeholder="Enter bet amount">
+                    <button onclick="startGameWithBet()" id="startGameWithBet">Start Game</button>
+                </div>
+            </div>            
         </div>
         <div id="status"></div>
-        <div id ="balance" class="balance">
-            Balance: $ 
-            <div id="bal">0</div>
-        <button class="add-balance" onClick="addMoney()">+</button>
-    </div>
+        <div id="gameResult" style="display:none;"></div>
+
+        <div class="money-container">
+            <div id ="balance" class="balance-box">
+                Balance: $
+                <div id="bal">0</div>
+                <button class="add-balance" onClick="addMoney()">+</button>
+            </div>
+            <div class="bet-box">
+                <span id="currentBet">Bet: $0</span>
+            </div>
+        </div>
+
     </div>
     <div id="addMoneyDialog" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Add Money</h2>
-            <button onclick="updateBalance(5)">Add $5</button>
-            <button onclick="updateBalance(10)">Add $10</button>
+            <div class="add-money">Add Money</div>
             <button onclick="updateBalance(20)">Add $20</button>
-            <div style="display:inline;">
-                <input type="number" id="customAmount" placeholder="Enter custom amount">
-                <button onclick="addCustomAmount()">Add Custom Amount</button>
+            <button onclick="updateBalance(50)">Add $50</button>
+            <button onclick="updateBalance(100)">Add $100</button>
+            <div class="input-container">
+                <button onclick="addCustomAmount()">Custom: <input type="number" id="customAmount" placeholder=""></button>
             </div>
         </div>
-    <div id="blackjack-table">
-        <div id="dealer-total" class="total-display">Dealer's Total: ??</div>
-        <div id="dealer-hand" class="hand"></div>
-        <div id="player-total" class="total-display">Player's Total: 0</div>
-        <div id="player-hand" class="hand"></div>
-        <div id="game-controls">
-            <button id="hit-btn">Hit</button>
-            <button id="stand-btn">Stand</button>
-            <button id="play-again-btn" style="display: none;">Play Again</button>
-        </div>
-        <div id="status"></div>
     </div>
-</div>
-<script type="module" src="js/blackjack.js"></script>
 <script type="module" src="js/database.js"></script>
 <script type="module" src="js/ui.js"></script>
+<script src="js/blackjack.js"></script>
 </body>
 </html>

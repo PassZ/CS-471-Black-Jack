@@ -2,6 +2,7 @@ let deck = [];
 let playerHand = [];
 let dealerHand = [];
 let playerStand = false;
+var betAmount;
 
 function startGame() {
     playerHand = [];
@@ -20,10 +21,13 @@ function startGame() {
     // Update hands on UI
     updateHands();
 
-    document.getElementById('play-again-btn').style.display = 'none';
-    document.getElementById('hit-btn').style.display = 'inline-block';
-    document.getElementById('stand-btn').style.display = 'inline-block';
+    // document.getElementById('play-again-btn').style.display = 'none';
+    // document.getElementById('hit-btn').style.display = 'inline-block';
+    // document.getElementById('stand-btn').style.display = 'inline-block';
+    document.getElementById('gameResult').textContent = '';
     document.getElementById('status').textContent = '';
+    document.getElementById('game-controls').style.display = 'block';
+    document.getElementById('play-btn').style.display = 'none';
 }
 
 function createDeck() {
@@ -84,9 +88,8 @@ function updateHands() {
 
     renderHands();
 
-    if (playerTotal > 21) {
-        document.getElementById('status').textContent = 'Player Busts! Dealer Wins!';
-        endGame();
+    if (playerTotal > 20) {
+        determineWinner();
     }
 }
 
@@ -125,13 +128,17 @@ function playerStands() {
     dealerTurn();
 }
 
-function dealerTurn() {
+async function dealerTurn() {
     let dealerTotal = calculateHandTotal(dealerHand);
-    while (dealerTotal < 17) {
-        dealerHand.push(deck.pop());
-        dealerTotal = calculateHandTotal(dealerHand);
-    }
+    const dealerHandDiv = document.getElementById('dealer-hand');
+    dealerHandDiv.firstChild.src = `img/cards/${dealerHand[0].value}_of_${dealerHand[0].suit}.png`;
     updateHands();
+    while (dealerTotal < 17) {
+        await new Promise( resolve => setTimeout( resolve, 1000));
+                dealerHand.push(deck.pop());
+                dealerTotal = calculateHandTotal(dealerHand);
+                updateHands();
+    }
     determineWinner();
 }
 
@@ -140,21 +147,27 @@ function determineWinner() {
     const dealerTotal = calculateHandTotal(dealerHand);
 
     let result = '';
-    if (dealerTotal > 21 || playerTotal > dealerTotal) {
+    if( playerTotal > 21 ){
+        result = 'Dealer Wins!'
+        document.getElementById( 'gameResult' ).textContent = 'win';
+    } else if (dealerTotal > 21 || playerTotal > dealerTotal) {
         result = 'Player Wins!';
+        document.getElementById( 'gameResult' ).textContent = 'lose';
     } else if (playerTotal < dealerTotal) {
         result = 'Dealer Wins!';
+        document.getElementById( 'gameResult' ).textContent = 'lose';
     } else {
         result = 'Push!';
+        document.getElementById( 'gameResult' ).textContent = 'tie';
     }
-
     document.getElementById('status').textContent = result;
-    endGame();
+    document.getElementById('game-controls').style.display = 'none';
+    document.getElementById('play-btn').style.display = 'block';
 }
 
 function endGame() {
-    const dealerValue = getHandValue(dealerHand);
-    const playerValue = getHandValue(playerHand);
+    const dealerValue = calculateHandTotal(dealerHand);
+    const playerValue = calculateHandTotal(playerHand);
     let status = "Draw!";
     if (playerValue.value > 21) {
         status = "Dealer wins, player busts!";
@@ -166,25 +179,54 @@ function endGame() {
         status = "Dealer wins!";
     }
     document.getElementById('status').textContent = status;
-    document.getElementById('play-btn').style.display = ''; // Show play again button
-    document.getElementById('game-controls').querySelectorAll('button:not(#play-again-btn)').forEach(button => button.style.display = 'none');
+    document.getElementById('game-controls').style.display = 'none';
+    document.getElementById('play-btn').style.display = 'block';
+    document.getElementById( 'currentBet' ).textContent = '$0';
 }
 
-document.getElementById('hit-btn').addEventListener('click', playerHits);
-document.getElementById('stand-btn').addEventListener('click', playerStands);
-document.getElementById('play-again-btn').addEventListener('click', function() {
-    startGame();
-});
-
 function updateStatus() {
-    const playerTotal = getHandValue(playerHand);
+    const playerTotal = calculateHandTotal(playerHand);
     document.getElementById('player-total').textContent = `Player Total: ${playerTotal.text}`;
     document.getElementById('status').textContent = "Choose your action!";
 }
 
 function gameInit() {
-    document.getElementById('game-controls').querySelectorAll('button:not(#play-btn)').forEach(button => button.style.display = 'none');
+    document.getElementById('game-controls').style.display = 'none';
+    const playerHandDiv = document.getElementById('player-hand');
+    const dealerHandDiv = document.getElementById('dealer-hand');
+    playerHandDiv.innerHTML = '';
+    dealerHandDiv.innerHTML = '';
+    for( let i = 0; i < 2; i++ ){
+        const cardImg = document.createElement('img');
+        cardImg.src = `img/cards/back.png`;
+        cardImg.classList.add('card');
+        playerHandDiv.appendChild(cardImg);
+    };
+    for( let i = 0; i < 2; i++ ){
+        const cardImg = document.createElement('img');
+        cardImg.src = `img/cards/back.png`;
+        cardImg.classList.add('card');
+        dealerHandDiv.appendChild(cardImg);
+    };
 }
 
-document.addEventListener('DOMContentLoaded', gameInit);
-window.addEventListener('load', startGame);
+function showBetModal() {
+    document.getElementById( 'betModal').style.display = 'block';
+}
+function closeBetModal() {
+    document.getElementById('betModal').style.display = 'none';
+}
+
+function startGameWithBet() {
+    betAmount = parseFloat(document.getElementById('betAmount').value);
+    if (!isNaN(betAmount) && betAmount > 0) {
+        console.log("Starting game with bet: $" + betAmount);
+        document.getElementById( "currentBet").textContent = '$' + betAmount;
+        closeBetModal();
+        startGame();
+    } else {
+        alert("Please enter a valid bet amount.");
+    }
+}
+
+window.addEventListener('load', gameInit);
