@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
 onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log('User is signed in', user);
+        window.location.href = 'game.html';
     } else {
         console.log('No user is signed in');
     }
