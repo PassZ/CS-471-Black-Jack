@@ -25,7 +25,7 @@ onAuthStateChanged(auth, async (user) => {
                     userID: auth.currentUser.uid,
                 });
             } catch (e) {
-                console.error("Error adding document: ", e);            
+                console.error("Error adding document: ", e);
             }
         }
         else{
@@ -40,11 +40,11 @@ onAuthStateChanged(auth, async (user) => {
             document.getElementById( "gamesPlayed" ).textContent = doc.gamesPlayed;
             document.getElementById( "gamesWon" ).textContent = doc.gamesWon;
             document.getElementById( "winRate" ).textContent =  (Math.trunc( 10000 * (doc.gamesWon / ( doc.gamesPlayed === 0 ? 1 : doc.gamesPlayed))) / 100).toString() + "%" ;
-            document.getElementById( "moneyWon" ).textContent = 0;
-            document.getElementById( "moneyDeposited" ).textContent = 0;
-            document.getElementById( "accountBalance" ).textContent = doc.accountBalance;
-            document.getElementById( "gainLossPercent" ).textContent = doc.moneyWon / doc.moneyDeposited === 0 ? 1 : doc.moneyDeposited;
-            document.getElementById( "accountBalance" ).textContent = doc.accountBalance;
+            document.getElementById( "moneyWon" ).textContent = '$' + doc.moneyWon;
+            document.getElementById( "moneyDeposited" ).textContent = '$' + doc.moneyDeposited;
+            document.getElementById( "accountBalance" ).textContent = '$' + doc.accountBalance;
+            document.getElementById( "gainLossPercent" ).textContent = (Math.trunc( 100 * (doc.moneyWon / (doc.moneyDeposited === 0 ? 1 : doc.moneyDeposited)))).toString() + '%';
+            document.getElementById( "accountBalance" ).textContent = '$' + doc.accountBalance;
         }
         if( window.location.pathname === '/src/game.html' ){
             document.getElementById( "bal" ).textContent = docSnap.data().accountBalance;
@@ -96,24 +96,30 @@ async function logGameResults() {
     if(  result === 'lose' || result === "Dealer wins!"){
         await updateDoc( docSnapNew.ref , {
             gamesPlayed: increment(1),
-            gamesLost: increment(1)
+            gamesLost: increment(1),
+            moneyWon: increment( -1 * bet )
         });
+        document.getElementById('status').textContent = document.getElementById('status').textContent + ' $' + bet + ' lost!' 
     }
-    else if( result === 'tie!'){
+    else if( result === 'tie' || result === "Push!" ){
         await updateDoc(docSnapNew.ref , {
             gamesTied: increment(1),
             gamesPlayed: increment(1),
             accountBalance: increment( bet )
         });
         document.getElementById('bal').textContent = docSnapNew.data().accountBalance + bet;
+        document.getElementById('status').textContent = document.getElementById('status').textContent + ' $' + bet + ' bet returned!'; 
+
     }
     else if (result === "Player wins!" || result === "win" ){
         await updateDoc( docSnapNew.ref , {
             gamesWon: increment(1),
             gamesPlayed: increment(1),
-            accountBalance: increment( 1.5 * bet )
+            accountBalance: increment( 1.5 * bet ),
+            moneyWon: increment( 0.5 * bet )
         });
         document.getElementById('bal').textContent = docSnapNew.data().accountBalance + 1.5 * bet;
+        document.getElementById('status').textContent = document.getElementById('status').textContent.replace('!' , '') + ' $' + 1.5*bet + '!';
     }
 }
 
@@ -127,9 +133,8 @@ function closeModal() {
 
 function updateBalance(amount) {
     var currentBalance = parseInt(document.getElementById("bal").textContent);
-    var newBal = currentBalance + amount;
-    document.getElementById("bal").textContent = newBal;
-    recordNewBalance( newBal );
+    document.getElementById("bal").textContent = amount + currentBalance;
+    recordNewBalance( amount );
     closeModal();
 }
 
@@ -141,9 +146,10 @@ function addCustomAmount() {
     document.getElementById('customAmount').value = '';
 }
 
-async function recordNewBalance( newBal ){
+async function recordNewBalance( amount ){
     await updateDoc( docSnap.ref , {
-        accountBalance: newBal
+        accountBalance: increment( amount ),
+        moneyDeposited: increment( amount )
     })
 }
 window.addCustomAmount = addCustomAmount;
