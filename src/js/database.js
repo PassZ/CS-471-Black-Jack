@@ -8,6 +8,7 @@ let docSnap = null;
 
 onAuthStateChanged(auth, async (user) => {
     if (user) {
+        console.log(auth.currentUser.uid);
         const q = query(stats, where( "userID" , "==", auth.currentUser.uid));
         docSnap = await getDocs( q );
         const c = docSnap.size;
@@ -35,7 +36,7 @@ onAuthStateChanged(auth, async (user) => {
             }
         }
 
-        if( window.location.pathname === '/src/accountInformation.html'){
+        if( window.location.pathname.includes('accountInformation.html')){
             const doc = docSnap.data();
             document.getElementById( "gamesPlayed" ).textContent = doc.gamesPlayed;
             document.getElementById( "gamesWon" ).textContent = doc.gamesWon;
@@ -46,7 +47,8 @@ onAuthStateChanged(auth, async (user) => {
             document.getElementById( "gainLossPercent" ).textContent = (Math.trunc( 100 * (doc.moneyWon / (doc.moneyDeposited === 0 ? 1 : doc.moneyDeposited)))).toString() + '%';
             document.getElementById( "accountBalance" ).textContent = '$' + doc.accountBalance;
         }
-        if( window.location.pathname === '/src/game.html' ){
+        if( window.location.pathname.includes('/src/game.html')){
+            console.log('in game');
             document.getElementById( "bal" ).textContent = docSnap.data().accountBalance;
         }
     }
@@ -57,11 +59,13 @@ if (statusDiv){
     const observer = new MutationObserver((mutations) => {
         for (let mutation of mutations) {
             if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                if(statusDiv.textContent !== '' && statusDiv.textContent !== 'bet' ){
+                if(statusDiv.textContent !== '' && statusDiv.textContent !== 'bet' &&  statusDiv.textContent !== 'double'){
                     logGameResults();
                 }
                 else if( statusDiv.textContent === 'bet'){
                     subtractBet( parseInt( document.getElementById('bet').textContent));
+                }else if(statusDiv.textContent === 'double'){
+                    subtractBet( parseInt( document.getElementById('bet').textContent) * 0.5);
                 }
             }
         }
@@ -92,14 +96,16 @@ async function logGameResults() {
     const docSnapNew = q.docs[0];
     console.log( result );
     console.log( docSnapNew.data().accountBalance );
-    const bet = document.getElementById( 'bet' ).textContent;
+    const bet = parseFloat(document.getElementById( 'bet' ).textContent);
     if(  result === 'lose' || result === "Dealer wins!"){
         await updateDoc( docSnapNew.ref , {
             gamesPlayed: increment(1),
             gamesLost: increment(1),
             moneyWon: increment( -1 * bet )
         });
-        document.getElementById('status').textContent = document.getElementById('status').textContent + ' $' + bet + ' lost!' 
+        if(result === 'bet' || result === 'double'){
+            document.getElementById('status').textContent = document.getElementById('status').textContent  + ' $' + bet + ' lost!'
+        }
     }
     else if( result === 'tie' || result === "Push!" ){
         await updateDoc(docSnapNew.ref , {
@@ -107,8 +113,11 @@ async function logGameResults() {
             gamesPlayed: increment(1),
             accountBalance: increment( bet )
         });
+        if(result === 'bet' || result === 'double'){
+            document.getElementById('status').textContent = document.getElementById('status').textContent + ' $' + bet + ' bet returned!';
+        }
         document.getElementById('bal').textContent = docSnapNew.data().accountBalance + bet;
-        document.getElementById('status').textContent = document.getElementById('status').textContent + ' $' + bet + ' bet returned!'; 
+
 
     }
     else if (result === "Player wins!" || result === "win" ){
@@ -119,7 +128,9 @@ async function logGameResults() {
             moneyWon: increment( 0.5 * bet )
         });
         document.getElementById('bal').textContent = docSnapNew.data().accountBalance + 1.5 * bet;
-        document.getElementById('status').textContent = document.getElementById('status').textContent.replace('!' , '') + ' $' + 1.5*bet + '!';
+        if(result === 'bet' || result === 'double'){
+            document.getElementById('status').textContent = document.getElementById('status').textContent.replace('!' , '') + ' $' + 1.5*bet + '!';
+        }
     }
 }
 
@@ -140,7 +151,7 @@ function updateBalance(amount) {
 
 function addCustomAmount() {
     var amount = parseInt(document.getElementById("customAmount").value);
-    if (!isNaN(amount)) {
+    if (!isNaN(amount) || amount > 0) {
         updateBalance(amount);
     }
     document.getElementById('customAmount').value = '';

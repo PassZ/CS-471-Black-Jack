@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     console.log('Logged in:', userCredential.user);
-                    window.location.href = '/src/game.html';
+                    window.location.href = replaceFilename( window.location.href , 'game.html');
                 })
                 .catch((error) => {
                     console.error('Login failed:', error);
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (backButton) {
         backButton.addEventListener('click', () => {
-            window.location.href = 'login.html';
+            window.location.href = replaceFilename( window.location.href , 'login.html');
         });
     }
     //  Might need to move this to ui.js
@@ -94,8 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
 onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log('User is signed in', user);
-        window.location.href = 'game.html';
+        window.location.href = replaceFilename( window.location.href , 'game.html');
     } else {
         console.log('No user is signed in');
     }
 });
+
+function replaceFilename(path, newFilename) {
+    const separator = path.includes('/') ? '/' : '\\'; // Detect the separator
+    let parts = path.split(separator);
+    parts[parts.length - 1] = newFilename;
+    return parts.join(separator);
+}

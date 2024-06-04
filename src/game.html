@@ -32,12 +32,10 @@
         <div id="game-controls" style="display:none;" class="button-container">
             <button id="player-hit-btn" onclick="playerHits()">Hit</button>
             <button id="player-stand-btn" onclick="playerStands()">Stand</button>
-            <button id="player-split-btn" onclick="playerSplit()">Split</button>
             <button id="player-double-btn" onclick="playerDoubles()">Double</button>
-            <button id="player-insurance-btn" onclick="playerInsurance()">Insurance</button>
         </div>
         <div id="play-btn" class="button-container" style="display:block;">
-            <button id="play-again" onclick="startGame()" >Play </button>
+            <button id="play-again" onclick="startGameWithoutBet()" >Play </button>
             <button id="play-with-bet" onclick="showBetModal()" >Place bet and Play</button>
             <div id="betModal" class="modal" style="display:none;">
                 <div class="modal-content">
@@ -76,6 +74,7 @@
             </div>
         </div>
     </div>
+</div>
 <script type="module" src="js/database.js"></script>
 <script type="module" src="js/ui.js"></script>
 <script src="js/blackjack.js"></script>
