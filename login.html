@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Blackjack</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link href="https://fonts.cdnfonts.com/css/apple-chancery" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/i-insane-rush" rel="stylesheet">
+</head>
+<body>
+<div id="auth-container">
+    <div id="pageTitle">
+        <p1>Welcome to Blackjack</p1>
+    </div>
+    <div id="login-form-container" class="form-container active">
+        <h2>Welcome Back!</h2>
+        <form id="login-form" method="post">
+            <input type="email" id="login-email" placeholder="Email" required>
+            <div class="password-container">
+                <input type="password" id="login-password" placeholder="Password" required>
+                <img src="img/show.png"
+                     id="toggle-password"
+                     width="10%"
+                     height="80%"
+                     alt="Show Password"
+                     style="
+                    display: inline;
+                    margin-left: -1%;
+                    margin-top: -1.5%;
+                    vertical-align: middle;
+                    horiz-align: center;">
+            </div>
+            <button type="submit" id="login-button">Login</button>
+        </form>
+        <div class="logreg-link">
+            <p>Don't have an account? <a href="register.html">Sign Up</a></p>
+            <p><a href="forgot-password.html">Forgot password?</a></p>
+        </div>
+    </div>
+    <div id="user-content" style="display:none;">
+        <div class="toolbar">
+            <span>Blackjack</span>
+            <div class="user-profile" onclick="showUserOptions()">
+                <img src="img/profile_pic.png" alt="Account">
+            </div>
+        </div>
+        <div class="user-options" style="display:none;">
+            <ul>
+                <li><a href="accountInformation.html">Account Information</a></li>
+                <li><a href = "login.html">Blackjack</a></li>
+                <li><a href="#" onclick="logout()">Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="module" src="js/firebase.js"></script>
+<script type="module" src="js/ui.js"></script>
+<script type="module" src="js/auth.js"></script>
+</body>
+</html>

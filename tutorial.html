@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Play Blackjack</title>
+    <link href="https://fonts.cdnfonts.com/css/apple-chancery" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/i-insane-rush" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <style>
+         body {
+            font-family: "Times New Roman", serif;
+            color: #000;
+            background-color: #000000;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .toolbar {
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-family: "Apple Chancery", cursive;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .card {
+            background-color: #235700;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: auto; /* Added */
+        }
+        .card-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        ul {
+            text-align: left;
+            margin-left: 20px;
+        }
+    </style> 
+</head>
+<body>
+    <div class="container">
+        <div class="toolbar">
+            <span>How to Play Blackjack</span>
+            <div class="user-profile" onclick="showUserOptions()">
+                <img src="img/profile_pic.png" alt="Account">
+            </div>
+        </div>
+        <div class="user-options" id="user-options" >
+            <ul>
+                <li><a href="accountInformation.html">Account Information</a></li>
+                <li><a href="game.html">Blackjack</a></li>
+                <li><a href="tutorial.html">Tutorial</a></li>
+                <li><a href="login.html" onclick="logout()">Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <h1>Welcome to the Blackjack Tutorial!</h1>
+                <p>Blackjack is a popular card game played in casinos. The goal is to beat the dealer's hand without going over 21.</p>
+                <p>To start, you'll be dealt two cards. You can choose to "hit" to be dealt another card or "stand" to keep your current hand.</p>
+                <p>After you stand, the dealer will reveal their hand and draw additional cards until their hand totals 17 or higher.</p>
+                <p>If your hand is closer to 21 than the dealer's without going over, you win!</p>
+                <p>Remember:</p>
+                <ul>
+                    <li>Ace can count as 1 or 11 points, depending on your choice.</li>
+                    <li>Cards 2 through 10 are worth their face value.</li>
+                    <li>Face cards (Jack, Queen, King) are each worth 10 points.</li>
+                </ul>
+                <p>Enjoy the game and good luck!</p>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="module" src="js/firebase.js"></script>
+<script type="module" src="js/ui.js"></script>
+<script type="module" src="js/database.js"></script>
+<script src="js/blackjack.js"></script>
+</html>

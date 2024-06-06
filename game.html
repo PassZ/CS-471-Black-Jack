@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Game</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link href="https://fonts.cdnfonts.com/css/apple-chancery" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/i-insane-rush" rel="stylesheet">
+</head>
+<body>
+<div id="user-content">
+    <div class="toolbar">
+        <span>Blackjack</span>
+        <div class="user-profile" onclick="showUserOptions()">
+            <img src="img/profile_pic.png" alt="Account">
+        </div>
+    </div>
+    <div class="user-options" id="user-options">
+        <ul>
+            <li><a href="accountInformation.html">Account Information</a></li>
+            <li><a href="game.html">Blackjack</a></li>
+            <li><a href="tutorial.html">Tutorial</a></li>
+            <li><a href="login.html" onclick="logout()">Log Out</a></li>
+        </ul>
+    </div>
+
+    <div id="blackjack-table">
+        <div id="dealer-total" class="total-display">Dealer's Total: </div>
+        <div id="dealer-hand" class="hand"></div>
+        <div id="player-total" class="total-display">Player's Total: </div>
+        <div id="player-hand" class="hand"></div>
+        <div id="game-controls" style="display:none;" class="button-container">
+            <button id="player-hit-btn" onclick="playerHits()">Hit</button>
+            <button id="player-stand-btn" onclick="playerStands()">Stand</button>
+            <button id="player-double-btn" onclick="playerDoubles()">Double</button>
+        </div>
+        <div id="play-btn" class="button-container" style="display:block;">
+            <button id="play-again" onclick="startGameWithoutBet()" >Play </button>
+            <button id="play-with-bet" onclick="showBetModal()" >Place bet and Play</button>
+            <div id="betModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeBetModal()">&times;</span>
+                    <div>Enter Your Bet</div>
+                    <input type="number" id="betAmount" placeholder="Enter bet amount">
+                    <button onclick="startGameWithBet()" id="startGameWithBet">Start Game</button>
+                </div>
+            </div>            
+        </div>
+        <div id="status"></div>
+        <div id="gameResult" style="display:none;"></div>
+        <div class="money-container">
+            <div id ="balance" class="balance-box">
+                Balance: $
+                <div id="bal">0</div>
+                <button class="add-balance" onClick="addMoney()">+</button>
+            </div>
+            <div class="bet-box">
+                <span id="currentBet">Bet: $
+                    <span id="bet">0</span>
+                </span>
+            </div>
+        </div>
+
+    </div>
+    <div id="addMoneyDialog" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="add-money">Add Money</div>
+            <button onclick="updateBalance(20)">Add $20</button>
+            <button onclick="updateBalance(50)">Add $50</button>
+            <button onclick="updateBalance(100)">Add $100</button>
+            <div class="input-container">
+                <button onclick="addCustomAmount()">Custom: <input type="number" id="customAmount" placeholder=""></button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module" src="js/database.js"></script>
+<script type="module" src="js/ui.js"></script>
+<script src="js/blackjack.js"></script>
+</body>
+</html>
