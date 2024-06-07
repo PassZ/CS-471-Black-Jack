@@ -7,6 +7,33 @@
     <link rel="stylesheet" href="css/index.css">
     <link href="https://fonts.cdnfonts.com/css/apple-chancery" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/i-insane-rush" rel="stylesheet">
+    <style>
+        /* CSS for positioning */
+        #login-form-container {
+            position: relative;
+        }
+        .forgot-password {
+            position: absolute;
+            bottom: 0;
+            right: 20px;
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+        .password-container {
+            position: relative;
+        }
+        .password-container input {
+            width: 100%;
+            padding-right: 30px; /* Space for the eye icon */
+        }
+        #toggle-eye {
+            position: absolute;
+            right: 10px;
+            top: 40%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <div id="auth-container">
@@ -19,24 +46,18 @@
             <input type="email" id="login-email" placeholder="Email" required>
             <div class="password-container">
                 <input type="password" id="login-password" placeholder="Password" required>
-                <img src="img/show.png"
-                     id="toggle-password"
-                     width="10%"
-                     height="80%"
-                     alt="Show Password"
-                     style="
-                    display: inline;
-                    margin-left: -1%;
-                    margin-top: -1.5%;
-                    vertical-align: middle;
-                    horiz-align: center";>
+                <img src="img/eye.png"
+                     id="toggle-eye"
+                     width="20"
+                     height="20"
+                     alt="Show Password">
             </div>
             <button type="submit" id="login-button">Login</button>
+            <div class="logreg-link">
+                <p>Don't have an account? <a href="register.html">Sign Up</a></p>
+                <p class="forgot-password"><a href="forgot-password.html">Forgot password?</a></p>
+            </div>
         </form>
-        <div class="logreg-link">
-            <p>Don't have an account? <a href="register.html">Sign Up</a></p>
-            <p><a href="forgot-password.html">Forgot password?</a></p>
-        </div>
     </div>
     <div id="user-content" style="display:none;">
         <div class="toolbar">
@@ -48,12 +69,25 @@
         <div class="user-options" style="display:none;">
             <ul>
                 <li><a href="accountInformation.html">Account Information</a></li>
-                <li><a href = "login.html">Blackjack</a></li>
+                <li><a href="login.html">Blackjack</a></li>
                 <li><a href="#" onclick="logout()">Log Out</a></li>
             </ul>
         </div>
     </div>
 </div>
+<script type="module">
+    // JavaScript to toggle the visibility of the eye image
+    const toggleEye = document.getElementById('toggle-eye');
+    const passwordInput = document.getElementById('login-password');
+
+    toggleEye.addEventListener('click', () => {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+        } else {
+            passwordInput.type = 'password';
+        }
+    });
+</script>
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/ui.js"></script>
 <script type="module" src="js/auth.js"></script>

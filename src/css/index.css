@@ -170,7 +170,7 @@ button:hover {
 
 .form-container.active {
     display: block;
-    background-color: #333;
+    background-color: #000000;
 }
 
 #pageTitle {
@@ -181,7 +181,7 @@ button:hover {
 }
 
 #user-content .toolbar {
-    background-color: #333;
+    background-color: #000000;
     color: #fff;
     padding: 10px;
     display: flex;
@@ -219,12 +219,12 @@ button:hover {
     display: block;
     padding: 10px;
     text-decoration: none;
-    color: #333;
+    color: #000000;
 }
 
 .toolbar {
     width: 100%;
-    background-color: #006e37;
+    background-color: #000000;
     color: #fff;
     padding: 10px 20px;
     display: flex;
@@ -286,7 +286,7 @@ button:hover {
     font-size: 18px;
     font-family: 'I Insane Rush', Arial, sans-serif;
     color: #ffffff;
-    background-color: #333333;
+    background-color: #000000;
     padding: 10px;
     margin: 5px 0;
     border-radius: 5px;
@@ -353,7 +353,7 @@ button:hover {
 }
 
 .card {
-    background-color: #333333;
+    background-color: #000000;
     border: 2px solid #ccc;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
