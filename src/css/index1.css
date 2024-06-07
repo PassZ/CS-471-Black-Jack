@@ -1,48 +1,23 @@
-body, html {
+html, body {
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: url('../img/casino2.gif');
+    background-image: url('../img/cards/greenbg.jpg');
     background-size: cover;
-    height: 75%;
+    height: 100%;
     width: 100%;
     overflow: hidden;
-    position: relative; /* Set position to relative to position the twinkles */
 }
 
-.twinkle {
-    position: absolute; /* Set position to absolute for individual twinkles */
-    width: 2px;
-    height: 2px;
-    background-color: #fff; /* White color for the twinkles */
-    opacity: 0; /* Initially hidden */
-    animation: sparkle 2s infinite alternate; /* Apply sparkle animation */
-}
-
-@keyframes sparkle {
-    0% {
-        opacity: 0; /* Start invisible */
-    }
-    50% {
-        opacity: 1; /* Fade in */
-    }
-    100% {
-        opacity: 0; /* Fade out */
-    }
-}
-
-/* Additional styling for the auth-container */
 .auth-container{
     position: relative;
     width: 750px;
     height: 450px;
     background-color: #f9f9f9;
-    z-index: 1; /* Ensure the auth-container is above the twinkles */
 }
-
 
 h1 {
     font-family: 'Apple Chancery', sans-serif;
@@ -224,7 +199,7 @@ button:hover {
 
 .toolbar {
     width: 100%;
-    background-color: #006e37;
+    background-color: #333;
     color: #fff;
     padding: 10px 20px;
     display: flex;
