@@ -5,7 +5,7 @@ html, body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: url('../img/cards/bg.jpg');
+    background-image: url('../img/CasinoBG.jpg');
     background-size: cover;
     height: 100%;
     width: 100%;
@@ -199,7 +199,7 @@ button:hover {
 
 .toolbar {
     width: 100%;
-    background-color: black;
+    background-color: #333;
     color: #fff;
     padding: 10px 20px;
     display: flex;
