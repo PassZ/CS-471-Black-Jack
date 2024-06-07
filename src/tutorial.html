@@ -8,11 +8,16 @@
     <link href="https://fonts.cdnfonts.com/css/i-insane-rush" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css">
     <style>
-         body {
+        body {
             font-family: "Times New Roman", serif;
             color: #000;
             background-color: #000000;
             padding: 20px;
+            display: flex; /* Added */
+            justify-content: center; /* Added */
+            align-items: center; /* Added */
+            height: 100vh; /* Added */
+            margin: 0; /* Added */
         }
         .container {
             text-align: center;
@@ -39,6 +44,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             overflow: auto; /* Added */
+            max-width: 90%; /* Adjusted */
         }
         .card-title {
             font-size: 24px;

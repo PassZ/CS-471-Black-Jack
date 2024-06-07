@@ -10,14 +10,30 @@ html, body {
     height: 100%;
     width: 100%;
     overflow: hidden;
+    animation: lightEffect 10s infinite alternate;
 }
 
+@keyframes lightEffect {
+    0% {
+        filter: brightness(100%);
+    }
+    50% {
+        filter: brightness(110%);
+    }
+    100% {
+        filter: brightness(100%);
+    }
+}
+
+/* Additional styling for the auth-container */
 .auth-container{
     position: relative;
     width: 750px;
     height: 450px;
     background-color: #f9f9f9;
+    z-index: 1; /* Ensure the auth-container is above the twinkles */
 }
+
 
 h1 {
     font-family: 'Apple Chancery', sans-serif;
