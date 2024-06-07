@@ -19,7 +19,18 @@
         align-items: center;
         height: 100vh;
         }
-    
+        .left-image, .right-image {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            z-index: -1;
+        }
+        .left-image {
+            left: 0;
+        }
+        .right-image {
+            right: 0;
+        }
         .toolbar {
             margin-bottom: 20px;
         }
@@ -51,6 +62,12 @@
     </style>
 </head>
 <body>
+     <!-- Left Image -->
+     <img class="left-image" src="url('..img/cards/cardsGIF.gif')" alt="Left Image">
+    
+     <!-- Right Image -->
+     <img class="right-image" src="url('..img/cards/cardsGIF.gif')" alt="Right Image">
+     
     <div class="container">
         <div class="toolbar">
             <span>How to Play Blackjack</span>
