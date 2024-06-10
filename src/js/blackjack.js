@@ -3,21 +3,15 @@ let playerHand = [];
 let dealerHand = [];
 let playerStand = false;
 var betAmount;
-let gameEnd = false;
-let playerBalance = parseFloat(document.getElementById('bal').textContent);
-
-
 
 function startGame() {
-    inGame = true;
     playerHand = [];
     dealerHand = [];
     playerStand = false;
+
     deck = createDeck();
     shuffleDeck(deck);
-    // hideMoneyContainer();
-    // Here we need to show the correct buttons and hide the correct buttons
-    // document.getElementById('player-double-btn').style.display = 'show';
+
     // Deal initial cards
     while (playerHand.length < 2) {
         playerHand.push(deck.pop());
@@ -26,8 +20,10 @@ function startGame() {
 
     // Update hands on UI
     updateHands();
-    checkBlackjack();
 
+    // document.getElementById('play-again-btn').style.display = 'none';
+    // document.getElementById('hit-btn').style.display = 'inline-block';
+    // document.getElementById('stand-btn').style.display = 'inline-block';
     document.getElementById('status').textContent = '';
     document.getElementById('game-controls').style.display = 'block';
     document.getElementById('play-btn').style.display = 'none';
@@ -43,7 +39,6 @@ function createDeck() {
         }
     }
     return deck;
-
 }
 
 function shuffleDeck(deck) {
@@ -122,46 +117,15 @@ function renderHands() {
     });
 }
 
-function checkBlackjack() {
-    const playerTotal = calculateHandTotal(playerHand);
-    if (playerTotal === 21) {
-        playerStand = true;
-        determineWinner();
-    }else if (dealerHand[1].value === 'A' ) {
-        // impliment logic to ask player if they want insurance
-    }
-
-}
-
 function playerHits() {
-    if(!playerStand){
-        playerHand.push(deck.pop());
-        updateHands();
-        // document.getElementById('double-btn').style.display = 'none';
-    }else{
-        alert("Please start a new game.");
-
-    }
+    playerHand.push(deck.pop());
+    updateHands();
 }
 
 function playerStands() {
-    if(!playerStand) {
-        dealerTurn();
-        playerStand = true;
-    }
     playerStand = true;
+    dealerTurn();
 }
-
-function playerDoubles() {
-    //implement money logic
-    document.getElementById('bet').textContent = parseFloat(document.getElementById('bet').textContent) * 2;
-    document.getElementById('gameResult').textContent = 'double';
-    document.getElementById('double-btn').style.display = 'none';
-    inGame = false;
-    playerHits();
-    playerStands();
-}
-
 
 async function dealerTurn() {
     let dealerTotal = calculateHandTotal(dealerHand);
@@ -180,7 +144,7 @@ async function dealerTurn() {
 function determineWinner() {
     const playerTotal = calculateHandTotal(playerHand);
     const dealerTotal = calculateHandTotal(dealerHand);
-    inGame = false;
+
     let result = '';
     if( playerTotal > 21 ){
         result = 'Dealer Wins!'
@@ -196,12 +160,30 @@ function determineWinner() {
         result = 'Push!';
         document.getElementById( 'gameResult' ).textContent = 'tie';
     }
-    // showMoneyContainer();
     document.getElementById('status').textContent = result;
     document.getElementById('game-controls').style.display = 'none';
     document.getElementById('play-btn').style.display = 'block';
     document.getElementById('betAmount').value = '';
 }
+
+// function endGame() {
+//     const dealerValue = calculateHandTotal(dealerHand);
+//     const playerValue = calculateHandTotal(playerHand);
+//     let status = "Draw!";
+//     if (playerValue.value > 21) {
+//         status = "Dealer wins, player busts!";
+//     } else if (dealerValue.value > 21) {
+//         status = "Player wins, dealer busts!";
+//     } else if (playerValue.value > dealerValue.value) {
+//         status = "Player wins!";
+//     } else if (dealerValue.value > playerValue.value) {
+//         status = "Dealer wins!";
+//     }
+//     document.getElementById('status').textContent = status;
+//     document.getElementById('game-controls').style.display = 'none';
+//     document.getElementById('play-btn').style.display = 'block';
+//     document.getElementById( 'vet' ).textContent = '0';
+// }
 
 function updateStatus() {
     const playerTotal = calculateHandTotal(playerHand);
@@ -218,13 +200,13 @@ function gameInit() {
         dealerHandDiv.innerHTML = '';
         for( let i = 0; i < 2; i++ ){
             const cardImg = document.createElement('img');
-            cardImg.src = img/cards/back.png;
+            cardImg.src = `img/cards/back.png`;
             cardImg.classList.add('card');
             playerHandDiv.appendChild(cardImg);
         };
         for( let i = 0; i < 2; i++ ){
             const cardImg = document.createElement('img');
-            cardImg.src = img/cards/back.png;
+            cardImg.src = `img/cards/back.png`;
             cardImg.classList.add('card');
             dealerHandDiv.appendChild(cardImg);
         };
@@ -238,27 +220,14 @@ function closeBetModal() {
     document.getElementById('betModal').style.display = 'none';
 }
 
-function showMoneyContainer() {
-    document.getElementById('money-container').style.display = 'block';
-}
-
-function hideMoneyContainer() {
-    document.getElementById('money-container').style.display = 'none';
-}
-
-function startGameWithoutBet() {
+function startGameWithoutBet() { 
     document.getElementById( 'bet' ).textContent = '0';
     document.getElementById('gameResult').textContent = '';
-    startGame();
 }
 
 function startGameWithBet() {
     betAmount = parseFloat(document.getElementById('betAmount').value);
-    playerBalance = parseFloat(document.getElementById('bal').textContent);
-    if(betAmount > playerBalance){
-        alert("Please enter a bet amount less than your balance.");
-    }
-    else if (!isNaN(betAmount) && betAmount > 0) {
+    if (!isNaN(betAmount) && betAmount > 0) {
         document.getElementById( "bet").textContent = betAmount;
         document.getElementById('gameResult').textContent = 'bet';
         closeBetModal();

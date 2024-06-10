@@ -17,27 +17,6 @@ const firebaseConfig = {
   measurementId: "G-3KKX3W76WB"
 };
 
-const status = document.getElementById('status');
-if (status){
-    const observer = new MutationObserver((mutations) => {
-        for (let mutation of mutations) {
-            if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                if(status.textContent.includes( 'Player') ){
-                    status.textContent = status.textContent.replace( 'Player' , user.displayName || user.email.substring(0, user.email.indexOf('@')))
-                }
-
-            }
-        }
-    });
-
-    const config = {
-        childList: true,
-        subtree: true,
-        characterData: true
-    };
-    observer.observe(status, config);
-}
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
@@ -60,14 +39,15 @@ onAuthStateChanged(auth, (user) => {
         }
     }
 
-    if (user && window.location.pathname.includes('accountInformation.html') ) {
+    if (user && window.location.pathname === '/src/accountInformation.html') {
         document.getElementById('username').textContent = user.displayName || user.email.substring(0, user.email.indexOf('@'));
         document.getElementById('email').textContent = user.email;
 
     }
+
 });
 
-if( window.location.pathname.includes('login.html')){
+if( window.location.pathname === '/src/login.html'){
     // Login event listener
     document.getElementById('login-form').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -83,6 +63,38 @@ if( window.location.pathname.includes('login.html')){
             });
     });
 }
+    // // Login event listener
+    // document.getElementById('login-form').addEventListener('submit', function(event) {
+    //     event.preventDefault();
+    //     const email = document.getElementById('login-email').value;
+    //     const password = document.getElementById('login-password').value;
+    //     signInWithEmailAndPassword(auth, email, password)
+    //         .then((userCredential) => {
+    //             // Signed in
+    //             console.log('Logged in:', userCredential.user);
+    //             window.location.href = '/src/game.html';
+    //         })
+    //         .catch((error) => {
+    //             console.error('Login failed:', error);
+    //             alert('Login failed! Please try again.');
+    //         });
+    // });
+
+    // // Register event listener
+    // document.getElementById('register-form').addEventListener('submit', function(event) {
+    //     event.preventDefault();
+    //     const email = document.getElementById('register-email').value;
+    //     const password = document.getElementById('register-password').value;
+    //     createUserWithEmailAndPassword(auth, email, password)
+    //         .then((userCredential) => {
+    //             // Registered but not logged in
+    //             console.log('Registered:', userCredential.user);
+    //         })
+    //         .catch((error) => {
+    //             console.error('Registration failed:', error);
+    //         });
+    // });
+
 
 function backToLogin() {
     // Redirect to the login page
@@ -102,6 +114,32 @@ function resetPassword() {
         .catch((error) => {
             alert('Error sending password reset email: ' + error.message);
         });
+}
+// document.getElementById('back-button').addEventListener('click', backToLogin);
+
+// document.getElementById('forgot-password-form').addEventListener('submit', resetPassword);
+
+
+
+const status = document.getElementById('status');
+if (status){
+    const observer = new MutationObserver((mutations) => {
+        for (let mutation of mutations) {
+            if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                if(status.textContent.includes( 'Player') ){
+                    status.textContent = status.textContent.replace( 'Player' , user.displayName || user.email.substring(0, user.email.indexOf('@')))
+                }
+
+            }
+        }
+    });
+    
+    const config = {
+        childList: true, 
+        subtree: true,   
+        characterData: true 
+    };
+    observer.observe(status, config);    
 }
 
 
